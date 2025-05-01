@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CR42 OS - Dual Boot Sequence</title>
+    <style>
+        /* Loading Screen Styles */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .loading-logo {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-shadow: 0 0 10px #0f0;
+            animation: pulse 2s infinite;
+        }
+        
+        .loading-bar-container {
+            width: 300px;
+            height: 20px;
+            border: 1px solid #0a0;
+            margin-bottom: 2rem;
+        }
+        
+        .loading-bar {
+            height: 100%;
+            width: 0%;
+            background-color: #0f0;
+            transition: width 0.3s ease;
+        }
+        
+        .loading-message {
+            margin-top: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.8; }
+            50% { opacity: 1; }
+        }
+        
+        /* First Boot Sequence Styles */
+        :root {
+            --primary-color: #0f0;
+            --secondary-color: #0a0;
+            --error-color: #f00;
+            --warning-color: #ff0;
+            --info-color: #0af;
+            --bg-color: #000;
+            --text-color: #0f0;
+            --border-color: #0a0;
+            --CR42-color: #0ff;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000 !important;
+            color: var(--text-color);
+            font-family: 'Courier New', monospace;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .boot-container {
+            width: 80%;
+            max-width: 800px;
+            position: relative;
+            z-index: 2;
+            display: none;
+        }
+        
+        .logo {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
+            text-shadow: 0 0 10px var(--primary-color);
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 20px;
+            background-color: #111;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(90deg, var(--secondary-color), var(--primary-color));
+            transition: width 0.5s ease;
+            position: relative;
+        }
+        
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                90deg,
+                rgba(255, 255, 255, 0.1) 0%,
+                rgba(255, 255, 255, 0.3) 50%,
+                rgba(255, 255, 255, 0.1) 100%
+            );
+            background-size: 200% 100%;
+            animation: shimmer 2s infinite;
+        }
+        
+        .boot-messages {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            padding: 10px;
+            margin-bottom: 1rem;
+            background-color: rgba(0, 20, 0, 0.1);
+        }
+        
+        .boot-message {
+            margin: 5px 0;
+            line-height: 1.4;
+            display: flex;
+        }
+        
+        .timestamp {
+            color: var(--secondary-color);
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .message-content {
+            flex-grow: 1;
+        }
+        
+        .success {
+            color: var(--primary-color);
+        }
+        
+        .warning {
+            color: var(--warning-color);
+        }
+        
+        .error {
+            color: var(--error-color);
+        }
+        
+        .info {
+            color: var(--info-color);
+        }
+        
+        .system-stats {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+            font-size: 0.8rem;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .stat-label {
+            margin-right: 5px;
+            color: var(--secondary-color);
+        }
+        
+        .stat-value {
+            font-weight: bold;
+        }
+        
+        @keyframes shimmer {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
+        }
+        
+        /* Retro scanlines effect */
+        .scanlines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(
+                rgba(0, 16, 0, 0.2) 50%,
+                rgba(0, 0, 0, 0.2) 50%
+            );
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* CRT curvature effect */
+        .crt-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            box-shadow: inset 0 0 100px rgba(255, 55, 0, 0.1);
+            border-radius: 10px;
+            border: 1px solid rgba(255, 89, 0, 0.2);
+        }
+        
+        /* Flicker effect */
+        .flicker {
+            opacity: 1;
+        }
+        
+        /* Boot options */
+        .boot-options {
+            display: none;
+            margin-top: 1rem;
+            border-top: 1px dashed var(--border-color);
+            padding-top: 1rem;
+        }
+        
+        .boot-option {
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            padding: 0.3rem;
+        }
+        
+        .boot-option:hover {
+            background-color: rgba(0, 255, 0, 0.1);
+        }
+        
+        .boot-option .key {
+            color: var(--warning-color);
+            margin-right: 0.5rem;
+        }
+        
+        /* Second Boot Sequence Styles */
+        .modern-boot {
+            display: none;
+            width: 90%;
+            max-width: 600px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .modern-boot .logo {
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-shadow: none;
+        }
+        
+        .logo-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-modern), var(--accent));
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.3);
+        }
+        
+        .logo-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+        
+        .logo-text {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(to right, var(--primary-modern), var(--accent));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        
+        .logo-version {
+            color: var(--primary-modern);
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+        
+        .modern-progress-container {
+            width: 100%;
+            height: 6px;
+            background-color: var(--bg-light);
+            border-radius: 3px;
+            margin: 2rem 0;
+            overflow: hidden;
+        }
+        
+        .modern-progress-bar {
+            height: 100%;
+            width: 0;
+            background: linear-gradient(to right, var(--primary-modern), var(--accent));
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+        
+        .status-message {
+            font-size: 0.9rem;
+            color: var(--primary-modern);
+            height: 20px;
+            margin-bottom: 1rem;
+        }
+        
+        .loading-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        
+        .dot {
+            width: 10px;
+            height: 10px;
+            background-color: var(--primary-modern);
+            border-radius: 50%;
+            margin: 0 5px;
+            opacity: 0.3;
+        }
+        
+        .dot:nth-child(1) { animation: dotPulse 1.5s infinite; }
+        .dot:nth-child(2) { animation: dotPulse 1.5s infinite 0.3s; }
+        .dot:nth-child(3) { animation: dotPulse 1.5s infinite 0.6s; }
+        
+        .powered-by {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.8rem;
+            color: rgba(204, 214, 246, 0.6);
+        }
+        
+        @keyframes dotPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        /* Modern color variables */
+        :root {
+            --primary-modern: #00a8ff;
+            --secondary-modern: #0077b6;
+            --bg-dark: #0a192f;
+            --bg-light: #172a45;
+            --text-light: #ccd6f6;
+            --accent: #64ffda;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .boot-container {
+                width: 95%;
+            }
+            
+            .logo {
+                font-size: 1.8rem;
+            }
+            
+            .boot-messages {
+                height: 200px;
+            }
+            
+            .loading-logo {
+                font-size: 1.8rem;
+            }
+            
+            .loading-bar-container {
+                width: 80%;
+            }
+        }
+
+    
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loading-logo">CR42 OS</div>
+        <div class="loading-bar-container">
+            <div class="loading-bar" id="loadingBar"></div>
+        </div>
+        <div class="loading-message" id="loadingMessage">Initializing boot loader...</div>
+    </div>
+    
+    <div class="scanlines"></div>
+    <div class="crt-effect"></div>
+    
+    <div class="boot-container flicker" id="firstBoot">
+        <div class="logo">
+            SYSTEM BOOT
+        </div>
+        
+        <div class="system-stats">
+            <div class="stat-item">
+                <span class="stat-label">CPU:</span>
+                <span class="stat-value" id="cpuStat">0%</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">MEM:</span>
+                <span class="stat-value" id="memStat">0MB/0MB</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">DISK:</span>
+                <span class="stat-value" id="diskStat">0MB/0MB</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">TEMP:</span>
+                <span class="stat-value" id="tempStat">0°C</span>
+            </div>
+        </div>
+        
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        
+        <div class="boot-messages" id="bootMessages">
+            <div class="boot-message">
+                <span class="timestamp">[00:00:00]</span>
+                <span class="message-content">Initializing system kernel...</span>
+            </div>
+        </div>
+        
+        <div class="boot-options" id="bootOptions">
+            <div class="boot-option" data-action="normal">
+                <span class="key">[1]</span> Normal Boot
+            </div>
+            <div class="boot-option" data-action="safe">
+                <span class="key">[2]</span> Safe Mode
+            </div>
+            <div class="boot-option" data-action="debug">
+                <span class="key">[3]</span> Debug Mode
+            </div>
+            <div class="boot-option" data-action="recovery">
+                <span class="key">[4]</span> Recovery Console
+            </div>
+        </div>
+        
+        <div class="boot-message" id="readyMessage" style="display: none;">
+            System ready. Press any key to continue or [ESC] for boot options...
+        </div>
+    </div>
+
+    <div class="modern-boot" id="modernBoot">
+        <div class="logo">
+            <div class="logo-icon">
+                <svg viewBox="0 0 24 24">
+                    <path d="M12,3L2,12H5V20H19V12H22L12,3M12,7.7L16,11.2V18H14V14H10V18H8V11.2L12,7.7Z" />
+                </svg>
+            </div>
+            <div class="logo-text">CR42 OS</div>
+            <div class="logo-version">Quantum Edition v2.1</div>
+        </div>
+        
+        <div class="status-message" id="statusMessage">Initializing quantum kernel</div>
+        
+        <div class="modern-progress-container">
+            <div class="modern-progress-bar" id="modernProgressBar"></div>
+        </div>
+        
+        <div class="loading-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        
+        <div class="powered-by">Powered by WebQuantum™ Technology</div>
+    </div>
+
+
+    <script>
+        // Configuration for loading screen
+        const loadingMessages = [
+            "Initializing boot loader...",
+            "Checking hardware integrity...",
+            "Loading system modules...",
+            "Preparing boot environment...",
+            "Almost ready...",
+            "Starting system..."
+        ];
+        
+        // Configuration for first boot sequence
+        const config = {
+            osName: "CR42 OS",
+            osVersion: "3.0",
+            osSlogan: "The future of digital consciousness",
+            bootDelay: 100,
+            showBootOptions: true,
+            simulateResources: true,
+            maxCpuUsage: 80,
+            maxMemUsage: 4096,
+            maxDiskUsage: 10240,
+            maxTemp: 65
+        };
+        
+        // Boot sequences for different modes
+        const bootSequences = {
+            normal: [
+                { text: "Checking hardware...", delay: 500, type: "normal" },
+                { text: "Hardware detected: Web Browser Environment", delay: 800, type: "success" },
+                { text: "CPU: " + navigator.hardwareConcurrency + " cores detected", delay: 300, type: "info" },
+                { text: "Memory: " + (performance.memory ? Math.round(performance.memory.jsHeapSizeLimit / 1048576) + "MB available" : "Memory API not available"), delay: 400, type: "info" },
+                { text: "Loading kernel modules...", delay: 300, type: "normal" },
+                { text: "Initializing quantum core...", delay: 1000, type: "normal" },
+                { text: "Quantum synchronization complete", delay: 800, type: "success" },
+                { text: "Initializing file system...", delay: 600, type: "normal" },
+                { text: "Mounted / as root", delay: 500, type: "success" },
+                { text: "Mounted /home as user storage", delay: 500, type: "success" },
+                { text: "Starting system services...", delay: 700, type: "normal" },
+                { text: "Neural network service started", delay: 900, type: "success" },
+                { text: "Quantum encryption initialized", delay: 800, type: "success" },
+                { text: "Network service started", delay: 400, type: "success" },
+                { text: "Audio service started", delay: 300, type: "success" },
+                { text: "Warning: Could not start service 'printer' - no printers found", delay: 800, type: "warning" },
+                { text: "Initializing user interface...", delay: 900, type: "normal" },
+                { text: "Connected to display server", delay: 600, type: "success" },
+                { text: "Loaded desktop environment", delay: 700, type: "success" },
+                { text: "Checking for updates...", delay: 1000, type: "normal" },
+                { text: "System is up to date", delay: 800, type: "success" },
+                { text: "Starting user session...", delay: 600, type: "normal" },
+                { text: "System boot complete", delay: 1000, type: "success" },
+                { text: "Activating CR42 core...", delay: 1200, type: "info" }
+            ],
+            safe: [
+                { text: "Booting in SAFE MODE...", delay: 500, type: "warning" },
+                { text: "Loading minimal kernel...", delay: 600, type: "normal" },
+                { text: "Skipping non-essential services", delay: 500, type: "warning" },
+                { text: "Network service started (limited)", delay: 700, type: "success" },
+                { text: "Basic display initialized", delay: 600, type: "success" },
+                { text: "Safe mode boot complete", delay: 1000, type: "success" },
+                { text: "Activating CR42 core...", delay: 1200, type: "info" }
+            ],
+            debug: [
+                { text: "Booting in DEBUG MODE...", delay: 500, type: "info" },
+                { text: "Enabling kernel debugger", delay: 600, type: "normal" },
+                { text: "Starting logging service", delay: 500, type: "success" },
+                { text: "Verbose logging enabled", delay: 400, type: "info" },
+                { text: "All services will log debug output", delay: 600, type: "warning" },
+                { text: "Debug mode ready", delay: 800, type: "success" },
+                { text: "Activating CR42 core...", delay: 1200, type: "info" }
+            ],
+            recovery: [
+                { text: "ENTERING RECOVERY CONSOLE", delay: 500, type: "error" },
+                { text: "WARNING: Normal services not available", delay: 600, type: "error" },
+                { text: "Filesystem check running...", delay: 1000, type: "normal" },
+                { text: "No filesystem errors detected", delay: 800, type: "success" },
+                { text: "Recovery tools loaded", delay: 600, type: "success" },
+                { text: "Type 'help' for available commands", delay: 500, type: "info" }
+            ]
+        };
+        
+        // Configuration for second boot sequence
+        const modernBootSequence = [
+            { message: "Initializing quantum kernel", progress: 10 },
+            { message: "Loading neural networks", progress: 20 },
+            { message: "Establishing secure connections", progress: 30 },
+            { message: "Mounting virtual filesystems", progress: 45 },
+            { message: "Starting core services", progress: 60 },
+            { message: "Authenticating biometrics", progress: 75 },
+            { message: "Optimizing performance", progress: 85 },
+            { message: "Ready for quantum leap", progress: 100 }
+        ];
+        
+        // DOM elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const loadingBar = document.getElementById('loadingBar');
+        const loadingMessage = document.getElementById('loadingMessage');
+        const firstBoot = document.getElementById('firstBoot');
+        const modernBoot = document.getElementById('modernBoot');
+        const bootMessagesElement = document.getElementById('bootMessages');
+        const progressBar = document.getElementById('progressBar');
+        const readyMessage = document.getElementById('readyMessage');
+        const bootOptions = document.getElementById('bootOptions');
+        const cpuStat = document.getElementById('cpuStat');
+        const memStat = document.getElementById('memStat');
+        const diskStat = document.getElementById('diskStat');
+        const tempStat = document.getElementById('tempStat');
+        const statusMessage = document.getElementById('statusMessage');
+        const modernProgressBar = document.getElementById('modernProgressBar');
+    
+        
+        // State variables
+        let currentBootSequence = 'normal';
+        let bootInProgress = true;
+        let progress = 0;
+        
+        // Show loading screen first
+        function showLoadingScreen() {
+            let loadProgress = 0;
+            const loadInterval = setInterval(() => {
+                loadProgress += Math.random() * 10;
+                if (loadProgress > 100) loadProgress = 100;
+                loadingBar.style.width = `${loadProgress}%`;
+                
+                // Update loading message every 20% progress
+                if (loadProgress % 20 < 5) {
+                    const messageIndex = Math.min(Math.floor(loadProgress / 20), loadingMessages.length - 1);
+                    loadingMessage.textContent = loadingMessages[messageIndex];
+                }
+                
+                if (loadProgress >= 100) {
+                    clearInterval(loadInterval);
+                    setTimeout(() => {
+                        loadingScreen.style.opacity = '0';
+                        setTimeout(() => {
+                            loadingScreen.style.display = 'none';
+                            firstBoot.style.display = 'block';
+                            initBoot();
+                        }, 500);
+                    }, 500);
+                }
+            }, 200);
+        }
+        
+        // Initialize the boot process
+        function initBoot() {
+            // Show boot options if enabled
+            if (config.showBootOptions) {
+                setTimeout(() => {
+                    bootOptions.style.display = 'block';
+                    // Add event listeners to boot options
+                    document.querySelectorAll('.boot-option').forEach(option => {
+                        option.addEventListener('click', () => {
+                            selectBootOption(option.dataset.action);
+                        });
+                    });
+                }, 1000);
+            } else {
+                startBooting(currentBootSequence);
+            }
+            
+            // Listen for ESC key to show boot options
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && !bootOptions.style.display && !bootInProgress) {
+                    bootOptions.style.display = 'block';
+                }
+            });
+        }
+        
+        // Select boot option
+        function selectBootOption(mode) {
+            currentBootSequence = mode;
+            bootOptions.style.display = 'none';
+            startBooting(mode);
+        }
+        
+        // Start the boot process
+        function startBooting(mode) {
+            bootInProgress = true;
+            const bootMessages = bootSequences[mode];
+            const totalSteps = bootMessages.length;
+            const progressIncrement = 100 / totalSteps;
+            
+            // Clear existing messages except the first one
+            while (bootMessagesElement.children.length > 1) {
+                bootMessagesElement.removeChild(bootMessagesElement.lastChild);
+            }
+            
+            // Reset progress
+            progress = 0;
+            progressBar.style.width = '0%';
+            
+            // Hide ready message if it was shown
+            readyMessage.style.display = 'none';
+            
+            // Start resource simulation if enabled
+            if (config.simulateResources) {
+                simulateSystemResources();
+            }
+            
+            // Display boot messages
+            bootMessages.forEach((message, index) => {
+                setTimeout(() => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = `boot-message ${message.type}`;
+                    
+                    const timestamp = new Date();
+                    const timestampStr = `[${timestamp.getHours().toString().padStart(2, '0')}:` +
+                                        `${timestamp.getMinutes().toString().padStart(2, '0')}:` +
+                                        `${timestamp.getSeconds().toString().padStart(2, '0')}]`;
+                    
+                    messageElement.innerHTML = `
+                        <span class="timestamp">${timestampStr}</span>
+                        <span class="message-content">${message.text}</span>
+                    `;
+                    
+                    bootMessagesElement.appendChild(messageElement);
+                    bootMessagesElement.scrollTop = bootMessagesElement.scrollHeight;
+                    
+                    // Update progress bar
+                    progress += progressIncrement;
+                    progressBar.style.width = `${progress}%`;
+                    
+                    // Show ready message at the end or proceed to second boot
+                    if (index === bootMessages.length - 1) {
+                        setTimeout(() => {
+                            if (mode !== 'recovery') {
+                                proceedToSecondBoot({key: ''});
+                            } else {
+                                readyMessage.style.display = 'block';
+                                bootInProgress = false;
+                                document.addEventListener('keydown', () => {
+                                    window.location.href = "os.html";
+                                });
+                                document.addEventListener('click', () => {
+                                    window.location.href = "os.html";
+                                });
+                            }
+                        }, 1000);
+                    }
+                }, index === 0 ? message.delay : bootMessages.slice(0, index).reduce((acc, curr) => acc + curr.delay, 0));
+            });
+        }
+        
+        // Simulate system resource usage
+        function simulateSystemResources() {
+            let cpuUsage = 0;
+            let memUsage = 0;
+            let diskUsage = 0;
+            let temp = 30;
+            
+            const interval = setInterval(() => {
+                if (!bootInProgress) {
+                    clearInterval(interval);
+                    return;
+                }
+                
+                // Simulate CPU usage
+                cpuUsage = Math.min(config.maxCpuUsage, 5 + Math.random() * 70);
+                
+                // Simulate memory usage
+                memUsage = Math.min(config.maxMemUsage, 512 + (progress / 100) * (config.maxMemUsage - 512));
+                
+                // Simulate disk usage
+                diskUsage = Math.min(config.maxDiskUsage, 1024 + (progress / 100) * (config.maxDiskUsage - 1024));
+                
+                // Simulate temperature
+                temp = Math.min(config.maxTemp, 30 + (progress / 100) * (config.maxTemp - 30) + Math.random() * 5);
+                
+                // Update UI
+                cpuStat.textContent = `${Math.round(cpuUsage)}%`;
+                memStat.textContent = `${Math.round(memUsage)}MB/${config.maxMemUsage}MB`;
+                diskStat.textContent = `${Math.round(diskUsage)}MB/${config.maxDiskUsage}MB`;
+                tempStat.textContent = `${Math.round(temp)}°C`;
+                
+            }, 500);
+        }
+        
+        // Proceed to second boot sequence
+        function proceedToSecondBoot(e) {
+            // Don't proceed if ESC was pressed (used for boot options)
+            if (e.key === 'Escape') return;
+            
+            document.removeEventListener('keydown', proceedToSecondBoot);
+            document.removeEventListener('click', proceedToSecondBoot);
+            
+            // Hide the first boot sequence
+            firstBoot.style.display = 'none';
+            
+            // Show the modern boot sequence
+            modernBoot.style.display = 'block';
+            
+            // Start the modern boot sequence
+            startModernBoot();
+        }
+        
+        // Start the modern boot sequence
+function startModernBoot() {
+    modernBootSequence.forEach((step, index) => {
+        setTimeout(() => {
+            statusMessage.textContent = step.message;
+            modernProgressBar.style.width = `${step.progress}%`;
+            
+            if (index === modernBootSequence.length - 1) {
+                setTimeout(() => {
+                    modernBoot.style.display = 'none';
+                    window.location.href = "os.html";
+                }, 1500);
+            }
+        }, index * 1000);
+    });
+}
+        
+        
+        // Start with loading screen when page loads
+        window.onload = showLoadingScreen;
+    </script>
+</body>
+</html>

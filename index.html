@@ -480,10 +480,10 @@
                 </svg>
             </div>
             <div class="logo-text">CR42 OS</div>
-            <div class="logo-version">Quantum Edition v2.1</div>
+            <div class="logo-version">Beta Edition v0.42</div>
         </div>
         
-        <div class="status-message" id="statusMessage">Initializing quantum kernel</div>
+        <div class="status-message" id="statusMessage">Initializing linux kernel</div>
         
         <div class="modern-progress-container">
             <div class="modern-progress-bar" id="modernProgressBar"></div>
@@ -495,7 +495,7 @@
             <div class="dot"></div>
         </div>
         
-        <div class="powered-by">Powered by WebQuantum™ Technology</div>
+        <div class="powered-by">Developed by aadhil_m</div>
     </div>
 
 
@@ -513,7 +513,7 @@
         // Configuration for first boot sequence
         const config = {
             osName: "CR42 OS",
-            osVersion: "3.0",
+            osVersion: "0.42",
             osSlogan: "The future of digital consciousness",
             bootDelay: 100,
             showBootOptions: true,
@@ -532,17 +532,17 @@
                 { text: "CPU: " + navigator.hardwareConcurrency + " cores detected", delay: 300, type: "info" },
                 { text: "Memory: " + (performance.memory ? Math.round(performance.memory.jsHeapSizeLimit / 1048576) + "MB available" : "Memory API not available"), delay: 400, type: "info" },
                 { text: "Loading kernel modules...", delay: 300, type: "normal" },
-                { text: "Initializing quantum core...", delay: 1000, type: "normal" },
-                { text: "Quantum synchronization complete", delay: 800, type: "success" },
+                { text: "Initializing CPU Core...", delay: 1000, type: "normal" },
+                { text: "System synchronization complete", delay: 800, type: "success" },
                 { text: "Initializing file system...", delay: 600, type: "normal" },
                 { text: "Mounted / as root", delay: 500, type: "success" },
                 { text: "Mounted /home as user storage", delay: 500, type: "success" },
                 { text: "Starting system services...", delay: 700, type: "normal" },
-                { text: "Neural network service started", delay: 900, type: "success" },
-                { text: "Quantum encryption initialized", delay: 800, type: "success" },
+                { text: "Kernel network service started", delay: 900, type: "success" },
+                { text: "Kernel encryption initialized", delay: 800, type: "success" },
                 { text: "Network service started", delay: 400, type: "success" },
                 { text: "Audio service started", delay: 300, type: "success" },
-                { text: "Warning: Could not start service 'printer' - no printers found", delay: 800, type: "warning" },
+                { text: "Warning: Could not start service 'network' - no network found", delay: 800, type: "warning" },
                 { text: "Initializing user interface...", delay: 900, type: "normal" },
                 { text: "Connected to display server", delay: 600, type: "success" },
                 { text: "Loaded desktop environment", delay: 700, type: "success" },
@@ -582,14 +582,14 @@
         
         // Configuration for second boot sequence
         const modernBootSequence = [
-            { message: "Initializing quantum kernel", progress: 10 },
+            { message: "Initializing web linux kernel", progress: 10 },
             { message: "Loading neural networks", progress: 20 },
             { message: "Establishing secure connections", progress: 30 },
             { message: "Mounting virtual filesystems", progress: 45 },
             { message: "Starting core services", progress: 60 },
             { message: "Authenticating biometrics", progress: 75 },
             { message: "Optimizing performance", progress: 85 },
-            { message: "Ready for quantum leap", progress: 100 }
+            { message: "Ready for kernel leap", progress: 100 }
         ];
         
         // DOM elements

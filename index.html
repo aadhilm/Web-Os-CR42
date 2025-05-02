@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CR42 OS - Dual Boot Sequence</title>
+    <title>CR42 OS - web_os</title>
     <style>
         /* Loading Screen Styles */
         .loading-screen {
@@ -449,6 +449,7 @@
             <div class="boot-message">
                 <span class="timestamp">[00:00:00]</span>
                 <span class="message-content">Initializing system kernel...</span>
+                <span class="message-content">Select boot sequence...</span>
             </div>
         </div>
         
@@ -468,7 +469,7 @@
         </div>
         
         <div class="boot-message" id="readyMessage" style="display: none;">
-            System ready. Press any key to continue or [ESC] for boot options...
+            System ready. Press any key to continue...
         </div>
     </div>
 
@@ -583,7 +584,7 @@
         // Configuration for second boot sequence
         const modernBootSequence = [
             { message: "Initializing web linux kernel", progress: 10 },
-            { message: "Loading neural networks", progress: 20 },
+            { message: "Loading system networks", progress: 20 },
             { message: "Establishing secure connections", progress: 30 },
             { message: "Mounting virtual filesystems", progress: 45 },
             { message: "Starting core services", progress: 60 },

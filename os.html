@@ -4,7 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  <title>Linux Desktop Environment</title>
+  <meta name="author" content="aadhil_m">
+  <meta name="description" content="A web-based Linux desktop simulation">
+  <title>CR42 WEB OS SIMULATION</title>
   
   <!-- Fonts and Icons -->
   <link href="https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap" rel="stylesheet">
@@ -122,13 +124,13 @@
     }
     
     .desktop-item img {
-  width: 48px;
-  height: 48px;
-  filter: hue-rotate(190deg) saturate(1.5);
-}
-.desktop-item img.firefox-icon {
-  filter: none !important;
-}
+      width: 48px;
+      height: 48px;
+      filter: hue-rotate(190deg) saturate(1.5);
+    }
+    .desktop-item img.firefox-icon {
+      filter: none !important;
+    }
     
     .icon-name {
       margin: 5px 0 0 0;
@@ -315,20 +317,20 @@
     
     /* App Menu */
     #appMenu {
-  position: fixed;
-  bottom: 50px;          /* Position above the panel */
-  left: 10px;            /* Align with the panel */
-  width: 250px;
-  background-color: rgba(40, 40, 40, 0.95);  /* Dark semi-transparent background */
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5); /* Stronger shadow for depth */
-  display: none;         /* Hidden by default */
-  z-index: 1001;         /* Ensure it appears above other elements */
-  backdrop-filter: blur(10px); /* Blur effect for modern browsers */
-  border: 1px solid rgba(255, 255, 255, 0.1); /* Subtle border */
-  padding: 8px 0;        /* Spacing inside menu */
-  color: #ffffff;        /* White text for better contrast */
-}
+      position: fixed;
+      bottom: 50px;
+      left: 10px;
+      width: 250px;
+      background-color: rgba(40, 40, 40, 0.95);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+      display: none;
+      z-index: 1001;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 8px 0;
+      color: #ffffff;
+    }
     
     .app-menu-item {
       padding: 10px 15px;
@@ -348,75 +350,75 @@
       color: white;
     }
     
-/* Right Click Menu */
-#body-rmenu {
-  position: absolute;
-  width: 220px;
-  background: rgba(45, 45, 50, 0.98);
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
-              0 0 0 1px rgba(255, 255, 255, 0.05);
-  display: none;
-  z-index: 1001;
-  backdrop-filter: blur(10px);
-  padding: 6px 0;
-  color: #f0f0f0;
-  font-size: 14px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-#body-rmenu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-#body-rmenu li {
-  padding: 8px 20px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: all 0.2s;
-  position: relative;
-}
-
-#body-rmenu li:hover {
-  background: rgba(120, 174, 237, 0.25);
-  color: white;
-}
-
-#body-rmenu li i {
-  margin-right: 12px;
-  width: 18px;
-  text-align: center;
-  color: #78aeed;
-  font-size: 13px;
-}
-
-#sub-menu {
-  display: none;
-  position: absolute;
-  left: calc(100% - 10px);
-  top: -6px;
-  width: 200px;
-  background: rgba(45, 45, 50, 0.98);
-  border-radius: 8px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-  z-index: 1002;
-  backdrop-filter: blur(10px);
-  padding: 6px 0;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-#change-bg:hover #sub-menu {
-  display: block;
-  animation: fadeIn 0.15s ease-out;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateX(10px); }
-  to { opacity: 1; transform: translateX(0); }
-}
+    /* Right Click Menu */
+    #body-rmenu {
+      position: absolute;
+      width: 220px;
+      background: rgba(45, 45, 50, 0.98);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3),
+                  0 0 0 1px rgba(255, 255, 255, 0.05);
+      display: none;
+      z-index: 1001;
+      backdrop-filter: blur(10px);
+      padding: 6px 0;
+      color: #f0f0f0;
+      font-size: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    #body-rmenu ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    
+    #body-rmenu li {
+      padding: 8px 20px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+      position: relative;
+    }
+    
+    #body-rmenu li:hover {
+      background: rgba(120, 174, 237, 0.25);
+      color: white;
+    }
+    
+    #body-rmenu li i {
+      margin-right: 12px;
+      width: 18px;
+      text-align: center;
+      color: #78aeed;
+      font-size: 13px;
+    }
+    
+    #sub-menu {
+      display: none;
+      position: absolute;
+      left: calc(100% - 10px);
+      top: -6px;
+      width: 200px;
+      background: rgba(45, 45, 50, 0.98);
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      z-index: 1002;
+      backdrop-filter: blur(10px);
+      padding: 6px 0;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    
+    #change-bg:hover #sub-menu {
+      display: block;
+      animation: fadeIn 0.15s ease-out;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateX(10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
     
     /* Selected Item */
     .selected {
@@ -424,144 +426,261 @@
     }
 
     /* Terminal Styles */
-#terminal {
-  padding: 1em;
-  height: 100%;
-  overflow-y: auto;
-  background-color: black;
-  color: lime;
-  font-family: monospace;
-}
-.terminal-line {
-  display: flex;
-  flex-wrap: wrap;
-}
-.prompt {
-  margin-right: 0.5em;
-  color: lime;
-}
-#input-line {
-  outline: none;
-  border: none;
-  background: transparent;
-  color: lime;
-  flex-grow: 1;
-  font-family: monospace;
-  font-size: 1em;
-}
+    #terminal {
+      padding: 1em;
+      height: 100%;
+      overflow-y: auto;
+      background-color: black;
+      color: lime;
+      font-family: monospace;
+    }
+    .terminal-line {
+      display: flex;
+      flex-wrap: wrap;
+    }
+    .prompt {
+      margin-right: 0.5em;
+      color: lime;
+    }
+    #input-line {
+      outline: none;
+      border: none;
+      background: transparent;
+      color: lime;
+      flex-grow: 1;
+      font-family: monospace;
+      font-size: 1em;
+    }
 
-/* Settings Window Specific Styles */
-.settings-category {
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: all 0.3s;
-  font-weight: 500;
-  color: #3d3846;
-  border-left: 4px solid transparent;
-}
+    /* Settings Window Specific Styles */
+    .settings-category {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      color: #3d3846;
+      border-left: 4px solid transparent;
+    }
 
-.settings-category:hover {
-  background: rgba(120, 174, 237, 0.1);
-  color: #241f31;
-}
+    .settings-category:hover {
+      background: rgba(120, 174, 237, 0.1);
+      color: #241f31;
+    }
 
-.settings-category.active {
-  background: rgba(120, 174, 237, 0.15);
-  border-left: 4px solid #78aeed;
-  color: #241f31;
-}
+    .settings-category.active {
+      background: rgba(120, 174, 237, 0.15);
+      border-left: 4px solid #78aeed;
+      color: #241f31;
+    }
 
-.settings-card {
-  background: white;
-  border-radius: 8px;
-  padding: 15px;
-  margin-bottom: 15px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
+    .settings-card {
+      background: white;
+      border-radius: 8px;
+      padding: 15px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
 
-.slider-container {
-  margin: 15px 0;
-}
+    .slider-container {
+      margin: 15px 0;
+    }
 
-.slider {
-  width: 100%;
-  height: 6px;
-  border-radius: 3px;
-  background: #e2e1e0;
-  outline: none;
-  -webkit-appearance: none;
-}
+    .slider {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #e2e1e0;
+      outline: none;
+      -webkit-appearance: none;
+    }
 
-.slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background: #78aeed;
-  cursor: pointer;
-}
+    .slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: #78aeed;
+      cursor: pointer;
+    }
 
-/* Wallpaper Settings Styles */
-.wallpaper-thumb {
-  height: 120px;
-  background-size: cover;
-  background-position: center;
-  border-radius: 6px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s ease;
-  overflow: hidden;
-  border: 2px solid transparent;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
+    /* Wallpaper Settings Styles */
+    .wallpaper-thumb {
+      height: 120px;
+      background-size: cover;
+      background-position: center;
+      border-radius: 6px;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+      overflow: hidden;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
 
-.wallpaper-thumb:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-  border-color: #78aeed;
-}
+    .wallpaper-thumb:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+      border-color: #78aeed;
+    }
 
-.wallpaper-thumb span {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(61, 56, 70, 0.85);
-  color: white;
-  padding: 6px;
-  font-size: 12px;
-  text-align: center;
-}
+    .wallpaper-thumb span {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(61, 56, 70, 0.85);
+      color: white;
+      padding: 6px;
+      font-size: 12px;
+      text-align: center;
+    }
 
-/* Make select elements match the theme */
-select {
-  background: white;
-  border: 1px solid #d1cfcc;
-  color: #3d3846;
-  font-family: 'Ubuntu', sans-serif;
-  transition: border-color 0.2s;
-}
+    /* Make select elements match the theme */
+    select {
+      background: white;
+      border: 1px solid #d1cfcc;
+      color: #3d3846;
+      font-family: 'Ubuntu', sans-serif;
+      transition: border-color 0.2s;
+    }
 
-select:focus {
-  outline: none;
-  border-color: #78aeed;
-  box-shadow: 0 0 0 2px rgba(120, 174, 237, 0.2);
-}
+    select:focus {
+      outline: none;
+      border-color: #78aeed;
+      box-shadow: 0 0 0 2px rgba(120, 174, 237, 0.2);
+    }
 
-/* Apply button styling */
-button {
-  transition: all 0.2s;
-}
+    /* Apply button styling */
+    button {
+      transition: all 0.2s;
+    }
 
-button:hover {
-  background: #6a9ed6 !important;
-  transform: translateY(-1px);
-}
+    button:hover {
+      background: #6a9ed6 !important;
+      transform: translateY(-1px);
+    }
 
-button:active {
-  transform: translateY(0);
-}
+    button:active {
+      transform: translateY(0);
+    }
 
+    /* About Window - Perfect Centering */
+    #tab-about .tab-middle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      height: calc(100% - 104px);
+      overflow-y: auto;
+    }
+
+    .about-content {
+      width: 100%;
+      max-width: 380px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .about-header {
+      text-align: center;
+    }
+
+    .about-logo {
+      width: 80px;
+      height: 80px;
+      margin-bottom: 10px;
+    }
+
+    .about-header h2 {
+      margin: 5px 0;
+      font-size: 22px;
+      color: #241f31;
+    }
+
+    .version {
+      color: #78aeed;
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .about-description {
+      text-align: center;
+      color: #666;
+      margin: 0;
+      line-height: 1.5;
+      width: 100%;
+    }
+
+    .developer-info {
+      background: #f5f5f5;
+      border-radius: 8px;
+      padding: 15px;
+      width: 100%;
+    }
+
+    .info-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .info-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .info-row i {
+      color: #78aeed;
+      width: 20px;
+      text-align: center;
+      flex-shrink: 0;
+    }
+
+    .info-row a {
+      color: #78aeed;
+      text-decoration: none;
+    }
+
+    .social-section {
+      text-align: center;
+      width: 100%;
+    }
+
+    .connect-text {
+      color: #666;
+      margin-bottom: 12px;
+    }
+
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-icons a {
+      color: #5c5c5c;
+      font-size: 24px;
+      transition: all 0.2s;
+    }
+
+    .tab-footer {
+      border-top: 1px solid #e0e0e0;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .close-btn {
+      background: #78aeed;
+      color: white;
+      border: none;
+      padding: 8px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
   </style>
 </head>
 
@@ -602,11 +721,11 @@ button:active {
   </div>
 
   <!-- Firefox Browser -->
-<div class="desktop-item" title="Firefox" ondblclick="$('#tab-firefox').show(); clearSelection(this);" onclick="selectedItem(this)">
-  <img src="https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/master/Papirus/64x64/apps/firefox.svg" 
-       class="linux-icon firefox-icon" alt="Firefox" style="width:48px;height:48px;" />
-  <p class="icon-name">Firefox</p>
-</div>
+  <div class="desktop-item" title="Firefox" ondblclick="$('#tab-firefox').show(); clearSelection(this);" onclick="selectedItem(this)">
+    <img src="https://raw.githubusercontent.com/PapirusDevelopmentTeam/papirus-icon-theme/master/Papirus/64x64/apps/firefox.svg" 
+         class="linux-icon firefox-icon" alt="Firefox" style="width:48px;height:48px;" />
+    <p class="icon-name">Firefox</p>
+  </div>
 
   <!-- Settings -->
   <div class="desktop-item" title="Settings" ondblclick="$('#tab-settings').show(); clearSelection(this);" onclick="selectedItem(this)">
@@ -637,12 +756,13 @@ button:active {
     </svg>
     <p class="icon-name">Settings</p>
   </div>
+</div>
 
 <!-- Panel (Linux-style taskbar) -->
 <div id="panel">
   <!-- Inside the #panel section -->
-<div class="panel-icon" onclick="$('#appMenu').fadeToggle(200);">
-  <i class="fas fa-bars"></i> <!-- Menu icon -->
+  <div class="panel-icon" onclick="$('#appMenu').fadeToggle(200);">
+    <i class="fas fa-bars"></i> <!-- Menu icon -->
     <span>Applications</span>
   </div>
   
@@ -678,7 +798,7 @@ button:active {
     <i class="fas fa-globe"></i>
     <span>Firefox Browser</span>
   </div>
-  <div class="app-menu-item" onclick="alert('Settings app would open here'); $('#appMenu').hide();">
+  <div class="app-menu-item" onclick="$('#tab-settings').show(); $('#appMenu').hide();">
     <i class="fas fa-cog"></i>
     <span>Settings</span>
   </div>
@@ -734,7 +854,6 @@ button:active {
     <i class="fas fa-info-circle" style="margin-right: 5px;"></i> 8 items, Free space: 120 GB
   </div>
 </div>
-
 
 <!-- Terminal Window -->
 <div id="tab-calc" class="window" style="left: 150px; top: 100px;">
@@ -811,7 +930,6 @@ button:active {
   </div>
 </div>
 
-
 <!-- Settings Window -->
 <div id="tab-settings" class="window" style="left: 150px; top: 100px; width: 700px; height: 500px;">
   <div class="tab-header" style="background: linear-gradient(90deg, #3d3846 0%, #4a4454 100%);">
@@ -882,7 +1000,84 @@ button:active {
       <i class="fas fa-sliders-h"></i>
       <span>Wallpaper Settings</span>
     </li>
+    <li onclick="$('#tab-about').show()">
+      <i class="fas fa-info-circle"></i>
+      <span>About CR42 </span>
+    </li>
   </ul>
+</div>
+
+<!-- About Window -->
+<div id="tab-about" class="window" style="left: 300px; top: 100px; width: 700px; height: 600px;">
+  <div class="tab-header">
+    <i class="fas fa-info-circle"></i> About CR42
+    <i class="fas fa-times" onclick="$('#tab-about').hide()"></i>
+  </div>
+  <div class="tab-middle" style="padding: 20px; overflow-y: auto; height: calc(100% - 64px);">
+    <!-- Logo and Title -->
+    <div style="text-align: center; margin-bottom: 20px;">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/1200px-Tux.svg.png" 
+           style="width: 80px; height: 80px; margin-bottom: 10px;">
+      <h2 style="margin: 5px 0; font-size: 22px; color: #241f31;">CR42 WEB OS SIMULATION</h2>
+      <p style="color: #78aeed; margin: 0; font-size: 14px;">v0.42</p>
+    </div>
+
+    <!-- Description -->
+    <p style="text-align: center; color: #666; margin-bottom: 25px; line-height: 1.5;">
+      A web-based Linux desktop simulation built with HTML, CSS, and JavaScript.
+    </p>
+
+    <!-- Developer Info -->
+    <div style="background: #666; border-radius: 8px; padding: 15px; margin-bottom: 25px;">
+      <div style="display: flex; align-items: center; margin-bottom: 8px;">
+        <i class="fas fa-user" style="color: #78aeed; width: 20px; text-align: center;"></i>
+        <span style="margin-left: 10px;"><strong>Developer : </strong> aadhil_m</span>
+      </div>
+      <div style="display: flex; align-items: center; margin-bottom: 8px;">
+        <i class="fas fa-envelope" style="color: #78aeed; width: 20px; text-align: center;"></i>
+        <span style="margin-left: 10px;"><strong>Email:</strong> aadhilmna@gmail.com</span>
+      </div>
+      <div style="display: flex; align-items: center;">
+        <i class="fas fa-code-branch" style="color: #78aeed; width: 20px; text-align: center;"></i>
+        <span style="margin-left: 10px;"><strong>GitHub:</strong> 
+          <a href="https://github.com/yourusername" target="_blank" style="color: #78aeed; text-decoration: none;">
+            https://github.com/aadhilm
+          </a>
+        </span>
+      </div>
+    </div>
+
+    <!-- Social Media -->
+    <div style="text-align: center; margin-bottom: 25px;">
+      <p style="color: #666; margin-bottom: 10px;">Connect with me:</p>
+      <div style="display: flex; justify-content: center; gap: 20px;">
+        <a href="https://www.linkedin.com/in/m-aadhil-/" target="_blank" title="LinkedIn">
+          <i class="fab fa-linkedin" style="color: #0A66C2; font-size: 24px;"></i>
+        </a>
+        <a href="https://instagram.com/yourprofile" target="_blank" title="Instagram">
+          <i class="fab fa-instagram" style="color: #ff01aa; font-size: 24px;"></i>
+        </a>        
+        <a href="https://www.facebook.com/profile.php?id=61574880802791" target="_blank" title="Facebook">
+          <i class="fab fa-facebook" style="color: #1877F2; font-size: 24px;"></i>
+        </a>
+        <a href="https://github.com/aadhilm" target="_blank" title="GitHub">
+          <i class="fab fa-github" style="color: #000000; font-size: 24px;"></i>
+        </a>        
+        <a href="https://aadhilm.github.io/MY-WEBSITE/" target="_blank" title="Blog">
+          <i class="fas fa-globe" style="color: #666; font-size: 24px;"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer with Close Button -->
+  <div style="border-top: 1px solid #e0e0e0; padding: 10px; text-align: center;">
+    <button onclick="$('#tab-about').hide()" 
+            style="background: #78aeed; color: white; border: none; padding: 8px 20px; 
+                   border-radius: 4px; cursor: pointer; font-size: 14px;">
+      <i class="fas fa-times"></i> Close
+    </button>
+  </div>
 </div>
 
 <!-- Wallpaper Settings Window -->
@@ -1068,7 +1263,7 @@ let promptSpan = document.getElementById('prompt');
 
 let currentPath = '/home/user';
 let isRoot = false;
-let fakeFileSystem = ['file1.txt', 'file2.txt', 'project'];
+let fakeFileSystem = ['Downloads', 'Music', 'Pictures', 'Videos', 'notes.txt', 'report.pdf', 'presentation.pptx']
 
 inputLine.addEventListener('keydown', function(e) {
   if (e.key === 'Enter') {
@@ -1158,9 +1353,17 @@ $(document).on('click', '[alt="Terminal"], #tab-calc .tab-header', function() {
   }
 });
 
-
-// Firefox browser functionality
+// Firefox browser functionality with Google search
 $(document).ready(function() {
+  // Handle Google search form submission
+  $('#google-search-form').on('submit', function(e) {
+    e.preventDefault();
+    const query = $('#google-search-input').val().trim();
+    if(query) {
+      performGoogleSearch(query);
+    }
+  });
+  
   // Handle URL navigation
   $('#firefox-url').on('keypress', function(e) {
     if(e.which === 13) { // Enter key
@@ -1194,115 +1397,6 @@ $(document).ready(function() {
     $('#search-engine').val('https://www.google.com/search?q=');
   });
 });
-
-
-// Firefox browser functionality with Google search
-$(document).ready(function() {
-  // Handle Google search form submission
-  $('#google-search-form').on('submit', function(e) {
-    e.preventDefault();
-    const query = $('#google-search-input').val().trim();
-    if(query) {
-      performGoogleSearch(query);
-    }
-  });
-  
-  // Handle URL navigation
-  $('#firefox-url').on('keypress', function(e) {
-    if(e.which === 13) { // Enter key
-      let url = $(this).val();
-      
-      // Add https:// if not present
-      if(!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'https://' + url;
-        $(this).val(url);
-      }
-      
-      // If it's a search term (no dots), perform Google search
-      if(!url.includes('.') && !url.includes('/')) {
-        performGoogleSearch(url);
-        return;
-      }
-      
-      // Try to load external URL (note: many sites block iframes)
-      try {
-        $('#google-container').html(`
-          <div style="width:100%;height:100%;display:flex;justify-content:center;align-items:center;">
-            <div style="text-align:center;">
-              <i class="fas fa-exclamation-triangle" style="font-size:48px;color:#fbbc05;margin-bottom:20px;"></i>
-              <p>This website cannot be displayed in the preview</p>
-              <p>Would you like to open it in a new tab?</p>
-              <button onclick="window.open('${url}', '_blank')" 
-                      style="background:#4285f4;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;">
-                Open in New Tab
-              </button>
-            </div>
-          </div>
-        `);
-      } catch(e) {
-        console.error("Error loading URL:", e);
-      }
-    }
-  });
-  
-  // Navigation buttons (simulated)
-  $('#back-button').click(function() {
-    // In a real implementation, this would track navigation history
-    showGoogleHome();
-  });
-  
-  $('#forward-button').click(function() {
-    // In a real implementation, this would track navigation history
-    alert("Forward navigation not implemented in this demo");
-  });
-  
-  $('#refresh-button').click(function() {
-    showGoogleHome();
-  });
-  
-  // Simulate browser controls
-  $(document).on('dblclick', '[alt="Firefox"]', function() {
-    showGoogleHome();
-  });
-});
-
-function showGoogleHome() {
-  $('#google-container').html(`
-    <div style="margin:auto;text-align:center;padding:20px;width:100%;max-width:600px;">
-      <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" 
-           style="width:200px;margin-bottom:20px;">
-      <form id="google-search-form" style="width:100%;">
-        <div style="position:relative;width:100%;">
-          <input type="text" id="google-search-input" 
-                 style="width:100%;padding:10px 15px;border-radius:24px;border:1px solid #dfe1e5;font-size:16px;"
-                 autocomplete="off">
-          <div style="position:absolute;right:10px;top:50%;transform:translateY(-50%);display:flex;gap:10px;">
-            <i class="fas fa-search" style="color:#9aa0a6;"></i>
-            <i class="fas fa-microphone" style="color:#4285f4;"></i>
-          </div>
-        </div>
-        <div style="margin-top:20px;">
-          <button type="submit" style="background:#f8f9fa;border:1px solid #f8f9fa;border-radius:4px;color:#3c4043;
-                  padding:8px 16px;margin:0 4px;cursor:pointer;">Google Search</button>
-          <button type="button" onclick="imFeelingLucky()" style="background:#f8f9fa;border:1px solid #f8f9fa;border-radius:4px;
-                  color:#3c4043;padding:8px 16px;margin:0 4px;cursor:pointer;">I'm Feeling Lucky</button>
-        </div>
-      </form>
-    </div>
-    <div id="search-results" style="flex:1;overflow-y:auto;padding:20px;display:none;"></div>
-  `);
-  
-  // Re-attach event listeners
-  $('#google-search-form').on('submit', function(e) {
-    e.preventDefault();
-    const query = $('#google-search-input').val().trim();
-    if(query) {
-      performGoogleSearch(query);
-    }
-  });
-  
-  $('#firefox-url').val('https://www.google.com');
-}
 
 function performGoogleSearch(query) {
   // Show loading state
@@ -1396,6 +1490,76 @@ $(document).on('input', '.slider', function() {
 $(document).on('click', '[title="Settings"]', function() {
   $('.slider').trigger('input');
 });
+
+// Settings tabs functionality
+function changeSettingsTab(tabName) {
+  // Remove active class from all categories
+  $('.settings-category').removeClass('active');
+  
+  // Add active class to clicked category
+  $(`.settings-category:contains(${tabName.charAt(0).toUpperCase() + tabName.slice(1)})`).addClass('active');
+  
+  // Update settings content based on selected tab
+  let content = '';
+  
+  switch(tabName) {
+    case 'system':
+      content = `
+        <div id="system-settings" class="settings-tab-content">
+          <h2 style="color:#3d3846;margin-top:0;">System Preferences</h2>
+          <div class="settings-card">
+            <h3><i class="fas fa-sun" style="color:#78aeed;"></i> Display</h3>
+            <div class="slider-container">
+              <label>Brightness</label>
+              <input type="range" class="slider" min="0" max="100" value="70">
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3><i class="fas fa-volume-up" style="color:#78aeed;"></i> Sound</h3>
+            <div class="slider-container">
+              <label>Volume</label>
+              <input type="range" class="slider" min="0" max="100" value="50">
+            </div>
+          </div>
+        </div>
+      `;
+      break;
+      
+    case 'appearance':
+      content = `
+        <div id="appearance-settings" class="settings-tab-content">
+          <h2 style="color:#3d3846;margin-top:0;">Appearance</h2>
+          <div class="settings-card">
+            <h3><i class="fas fa-palette" style="color:#78aeed;"></i> Themes</h3>
+            <div style="margin-bottom:15px;">
+              <label style="display:block;margin-bottom:8px;color:#3d3846;">Theme:</label>
+              <select style="padding:8px;border-radius:4px;border:1px solid #d1cfcc;width:100%;background:white;color:#3d3846;">
+                <option>Dark</option>
+                <option>Light</option>
+                <option>System Default</option>
+              </select>
+            </div>
+          </div>
+          <div class="settings-card">
+            <h3><i class="fas fa-image" style="color:#78aeed;"></i> Wallpaper</h3>
+            <p>Customize your desktop background</p>
+            <button onclick="$('#tab-wallpaper').show();" 
+                    style="background:#78aeed;color:white;border:none;padding:8px 16px;border-radius:4px;cursor:pointer;margin-top:10px;">
+              Open Wallpaper Settings
+            </button>
+          </div>
+        </div>
+      `;
+      break;
+      
+    // Add other tabs 
+    default:
+      content = `<div class="settings-tab-content"><p>Settings content for ${tabName} will appear here</p></div>`;
+  }
+  
+  $('#settings-content').html(content);
+  $('.slider').trigger('input'); 
+}
 
 // Wallpaper functionality
 let currentWallpaper = 'mountains';
@@ -1494,7 +1658,7 @@ function applyWallpaper() {
   $('#tab-wallpaper').hide();
 }
 
-// Update preview in settings
+
 function updateWallpaperPreview() {
   if (currentWallpaper.startsWith('custom:')) {
     document.getElementById('current-wallpaper-preview').style.backgroundImage = `url(${currentWallpaper.replace('custom:', '')})`;
@@ -1511,10 +1675,17 @@ function openWallpaperSettings() {
   $('#body-rmenu').hide();
 }
 
-// Initialize on load
+
 $(document).ready(function() {
   initWallpaper();
+
+  changeSettingsTab('system');
 });
+
+console.log(`
+  Linux Desktop Environment v1.0.0
+  By: aadhil_m | GitHub: aadhilm
+`);
 
 // Hide menus initially
 $('#body-rmenu').hide();

@@ -401,7 +401,66 @@
             }
         }
 
-    
+/* Dual Boot Menu Styles */
+.dual-boot-menu {
+    padding: 20px;
+    text-align: center;
+}
+.dual-boot-header {
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    color: var(--primary-color);
+}
+.dual-boot-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    margin: 10px 0;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.dual-boot-option:hover {
+    background-color: rgba(0, 255, 0, 0.1);
+    border-color: var(--primary-color);
+}
+.dual-boot-icon {
+    font-size: 2rem;
+    margin-bottom: 10px;
+}
+.dual-boot-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+.dual-boot-desc {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+.dual-boot-hint {
+    margin-top: 30px;
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+}
+
+.boot-messages {
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+}
+
+.boot-messages::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome/Safari */
+}
+
+.dual-boot-menu {
+    animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
     </style>
 </head>
 <body>
@@ -449,6 +508,9 @@
             <div class="boot-message">
                 <span class="timestamp">[00:00:00]</span>
                 <span class="message-content">Initializing system kernel...</span>
+            </div>
+            <div class="boot-message">
+                <span class="timestamp">[00:00:00]</span>
                 <span class="message-content">Select boot sequence...</span>
             </div>
         </div>
@@ -466,6 +528,9 @@
             <div class="boot-option" data-action="recovery">
                 <span class="key">[4]</span> Recovery Console
             </div>
+            <div class="boot-option" data-action="dual">
+        <span class="key">[5]</span> Dual Boot (CR42 + Linux)
+    </div>
         </div>
         
         <div class="boot-message" id="readyMessage" style="display: none;">
@@ -502,301 +567,390 @@
 
     <script>
         // Configuration for loading screen
-        const loadingMessages = [
-            "Initializing boot loader...",
-            "Checking hardware integrity...",
-            "Loading system modules...",
-            "Preparing boot environment...",
-            "Almost ready...",
-            "Starting system..."
-        ];
+const loadingMessages = [
+    "Initializing boot loader...",
+    "Checking hardware integrity...",
+    "Loading system modules...",
+    "Preparing boot environment...",
+    "Almost ready...",
+    "Starting system..."
+];
+
+// Configuration for first boot sequence
+const config = {
+    osName: "CR42 OS",
+    osVersion: "0.42",
+    osSlogan: "The future of digital consciousness",
+    bootDelay: 100,
+    showBootOptions: true,
+    simulateResources: true,
+    maxCpuUsage: 80,
+    maxMemUsage: 4096,
+    maxDiskUsage: 10240,
+    maxTemp: 65
+};
+
+// Boot sequences for different modes
+const bootSequences = {
+    normal: [
+        { text: "Checking hardware...", delay: 500, type: "normal" },
+        { text: "Hardware detected: Web Browser Environment", delay: 800, type: "success" },
+        { text: "CPU: " + navigator.hardwareConcurrency + " cores detected", delay: 300, type: "info" },
+        { text: "Memory: " + (performance.memory ? Math.round(performance.memory.jsHeapSizeLimit / 1048576) + "MB available" : "Memory API not available"), delay: 400, type: "info" },
+        { text: "Loading kernel modules...", delay: 300, type: "normal" },
+        { text: "Initializing CPU Core...", delay: 1000, type: "normal" },
+        { text: "System synchronization complete", delay: 800, type: "success" },
+        { text: "Initializing file system...", delay: 600, type: "normal" },
+        { text: "Mounted / as root", delay: 500, type: "success" },
+        { text: "Mounted /home as user storage", delay: 500, type: "success" },
+        { text: "Starting system services...", delay: 700, type: "normal" },
+        { text: "Kernel network service started", delay: 900, type: "success" },
+        { text: "Kernel encryption initialized", delay: 800, type: "success" },
+        { text: "Network service started", delay: 400, type: "success" },
+        { text: "Audio service started", delay: 300, type: "success" },
+        { text: "Warning: Could not start service 'network' - no network found", delay: 800, type: "warning" },
+        { text: "Initializing user interface...", delay: 900, type: "normal" },
+        { text: "Connected to display server", delay: 600, type: "success" },
+        { text: "Loaded desktop environment", delay: 700, type: "success" },
+        { text: "Checking for updates...", delay: 1000, type: "normal" },
+        { text: "System is up to date", delay: 800, type: "success" },
+        { text: "Starting user session...", delay: 600, type: "normal" },
+        { text: "System boot complete", delay: 1000, type: "success" },
+        { text: "Activating CR42 core...", delay: 1200, type: "info" }
+    ],
+    safe: [
+        { text: "Booting in SAFE MODE...", delay: 500, type: "warning" },
+        { text: "Loading minimal kernel...", delay: 600, type: "normal" },
+        { text: "Skipping non-essential services", delay: 500, type: "warning" },
+        { text: "Network service started (limited)", delay: 700, type: "success" },
+        { text: "Basic display initialized", delay: 600, type: "success" },
+        { text: "Safe mode boot complete", delay: 1000, type: "success" },
+        { text: "Activating CR42 core...", delay: 1200, type: "info" }
+    ],
+    debug: [
+        { text: "Booting in DEBUG MODE...", delay: 500, type: "info" },
+        { text: "Enabling kernel debugger", delay: 600, type: "normal" },
+        { text: "Starting logging service", delay: 500, type: "success" },
+        { text: "Verbose logging enabled", delay: 400, type: "info" },
+        { text: "All services will log debug output", delay: 600, type: "warning" },
+        { text: "Debug mode ready", delay: 800, type: "success" },
+        { text: "Activating CR42 core...", delay: 1200, type: "info" }
+    ],
+    recovery: [
+        { text: "ENTERING RECOVERY CONSOLE", delay: 500, type: "error" },
+        { text: "WARNING: Normal services not available", delay: 600, type: "error" },
+        { text: "Filesystem check running...", delay: 1000, type: "normal" },
+        { text: "No filesystem errors detected", delay: 800, type: "success" },
+        { text: "Recovery tools loaded", delay: 600, type: "success" },
+        { text: "Type 'help' for available commands", delay: 500, type: "info" }
+    ],
+    dual: [
+        { text: "Initializing DUAL BOOT sequence...", delay: 500, type: "info" },
+        { text: "Partitioning system resources...", delay: 800, type: "normal" },
+        { text: "Allocating 50% to CR42 OS", delay: 600, type: "success" },
+        { text: "Allocating 50% to Linux kernel", delay: 600, type: "success" },
+        { text: "Creating shared memory space", delay: 700, type: "normal" },
+        { text: "Loading CR42 kernel modules...", delay: 900, type: "normal" },
+        { text: "Loading Linux compatibility layer", delay: 1000, type: "normal" },
+        { text: "Warning: Some Linux features may be limited", delay: 800, type: "warning" },
+        { text: "Initializing dual environment...", delay: 900, type: "normal" },
+        { text: "CR42-Linux bridge established", delay: 1000, type: "success" },
+        { text: "Dual boot environment ready", delay: 1200, type: "success" },
+        { text: "Press any key to select OS", delay: 1000, type: "info" }
+    ]
+};
+
+// Configuration for second boot sequence
+const modernBootSequence = [
+    { message: "Initializing web linux kernel", progress: 10 },
+    { message: "Loading system networks", progress: 20 },
+    { message: "Establishing secure connections", progress: 30 },
+    { message: "Mounting virtual filesystems", progress: 45 },
+    { message: "Starting core services", progress: 60 },
+    { message: "Authenticating biometrics", progress: 75 },
+    { message: "Optimizing performance", progress: 85 },
+    { message: "Ready for kernel leap", progress: 100 }
+];
+
+// DOM elements
+const loadingScreen = document.getElementById('loadingScreen');
+const loadingBar = document.getElementById('loadingBar');
+const loadingMessage = document.getElementById('loadingMessage');
+const firstBoot = document.getElementById('firstBoot');
+const modernBoot = document.getElementById('modernBoot');
+const bootMessagesElement = document.getElementById('bootMessages');
+const progressBar = document.getElementById('progressBar');
+const readyMessage = document.getElementById('readyMessage');
+const bootOptions = document.getElementById('bootOptions');
+const cpuStat = document.getElementById('cpuStat');
+const memStat = document.getElementById('memStat');
+const diskStat = document.getElementById('diskStat');
+const tempStat = document.getElementById('tempStat');
+const statusMessage = document.getElementById('statusMessage');
+const modernProgressBar = document.getElementById('modernProgressBar');
+
+// State variables
+let currentBootSequence = 'normal';
+let bootInProgress = true;
+let progress = 0;
+let selectedOS = 'cr42'; // Tracks which OS was selected in dual boot
+
+// Show loading screen first
+function showLoadingScreen() {
+    let loadProgress = 0;
+    const loadInterval = setInterval(() => {
+        loadProgress += Math.random() * 10;
+        if (loadProgress > 100) loadProgress = 100;
+        loadingBar.style.width = `${loadProgress}%`;
         
-        // Configuration for first boot sequence
-        const config = {
-            osName: "CR42 OS",
-            osVersion: "0.42",
-            osSlogan: "The future of digital consciousness",
-            bootDelay: 100,
-            showBootOptions: true,
-            simulateResources: true,
-            maxCpuUsage: 80,
-            maxMemUsage: 4096,
-            maxDiskUsage: 10240,
-            maxTemp: 65
-        };
-        
-        // Boot sequences for different modes
-        const bootSequences = {
-            normal: [
-                { text: "Checking hardware...", delay: 500, type: "normal" },
-                { text: "Hardware detected: Web Browser Environment", delay: 800, type: "success" },
-                { text: "CPU: " + navigator.hardwareConcurrency + " cores detected", delay: 300, type: "info" },
-                { text: "Memory: " + (performance.memory ? Math.round(performance.memory.jsHeapSizeLimit / 1048576) + "MB available" : "Memory API not available"), delay: 400, type: "info" },
-                { text: "Loading kernel modules...", delay: 300, type: "normal" },
-                { text: "Initializing CPU Core...", delay: 1000, type: "normal" },
-                { text: "System synchronization complete", delay: 800, type: "success" },
-                { text: "Initializing file system...", delay: 600, type: "normal" },
-                { text: "Mounted / as root", delay: 500, type: "success" },
-                { text: "Mounted /home as user storage", delay: 500, type: "success" },
-                { text: "Starting system services...", delay: 700, type: "normal" },
-                { text: "Kernel network service started", delay: 900, type: "success" },
-                { text: "Kernel encryption initialized", delay: 800, type: "success" },
-                { text: "Network service started", delay: 400, type: "success" },
-                { text: "Audio service started", delay: 300, type: "success" },
-                { text: "Warning: Could not start service 'network' - no network found", delay: 800, type: "warning" },
-                { text: "Initializing user interface...", delay: 900, type: "normal" },
-                { text: "Connected to display server", delay: 600, type: "success" },
-                { text: "Loaded desktop environment", delay: 700, type: "success" },
-                { text: "Checking for updates...", delay: 1000, type: "normal" },
-                { text: "System is up to date", delay: 800, type: "success" },
-                { text: "Starting user session...", delay: 600, type: "normal" },
-                { text: "System boot complete", delay: 1000, type: "success" },
-                { text: "Activating CR42 core...", delay: 1200, type: "info" }
-            ],
-            safe: [
-                { text: "Booting in SAFE MODE...", delay: 500, type: "warning" },
-                { text: "Loading minimal kernel...", delay: 600, type: "normal" },
-                { text: "Skipping non-essential services", delay: 500, type: "warning" },
-                { text: "Network service started (limited)", delay: 700, type: "success" },
-                { text: "Basic display initialized", delay: 600, type: "success" },
-                { text: "Safe mode boot complete", delay: 1000, type: "success" },
-                { text: "Activating CR42 core...", delay: 1200, type: "info" }
-            ],
-            debug: [
-                { text: "Booting in DEBUG MODE...", delay: 500, type: "info" },
-                { text: "Enabling kernel debugger", delay: 600, type: "normal" },
-                { text: "Starting logging service", delay: 500, type: "success" },
-                { text: "Verbose logging enabled", delay: 400, type: "info" },
-                { text: "All services will log debug output", delay: 600, type: "warning" },
-                { text: "Debug mode ready", delay: 800, type: "success" },
-                { text: "Activating CR42 core...", delay: 1200, type: "info" }
-            ],
-            recovery: [
-                { text: "ENTERING RECOVERY CONSOLE", delay: 500, type: "error" },
-                { text: "WARNING: Normal services not available", delay: 600, type: "error" },
-                { text: "Filesystem check running...", delay: 1000, type: "normal" },
-                { text: "No filesystem errors detected", delay: 800, type: "success" },
-                { text: "Recovery tools loaded", delay: 600, type: "success" },
-                { text: "Type 'help' for available commands", delay: 500, type: "info" }
-            ]
-        };
-        
-        // Configuration for second boot sequence
-        const modernBootSequence = [
-            { message: "Initializing web linux kernel", progress: 10 },
-            { message: "Loading system networks", progress: 20 },
-            { message: "Establishing secure connections", progress: 30 },
-            { message: "Mounting virtual filesystems", progress: 45 },
-            { message: "Starting core services", progress: 60 },
-            { message: "Authenticating biometrics", progress: 75 },
-            { message: "Optimizing performance", progress: 85 },
-            { message: "Ready for kernel leap", progress: 100 }
-        ];
-        
-        // DOM elements
-        const loadingScreen = document.getElementById('loadingScreen');
-        const loadingBar = document.getElementById('loadingBar');
-        const loadingMessage = document.getElementById('loadingMessage');
-        const firstBoot = document.getElementById('firstBoot');
-        const modernBoot = document.getElementById('modernBoot');
-        const bootMessagesElement = document.getElementById('bootMessages');
-        const progressBar = document.getElementById('progressBar');
-        const readyMessage = document.getElementById('readyMessage');
-        const bootOptions = document.getElementById('bootOptions');
-        const cpuStat = document.getElementById('cpuStat');
-        const memStat = document.getElementById('memStat');
-        const diskStat = document.getElementById('diskStat');
-        const tempStat = document.getElementById('tempStat');
-        const statusMessage = document.getElementById('statusMessage');
-        const modernProgressBar = document.getElementById('modernProgressBar');
-    
-        
-        // State variables
-        let currentBootSequence = 'normal';
-        let bootInProgress = true;
-        let progress = 0;
-        
-        // Show loading screen first
-        function showLoadingScreen() {
-            let loadProgress = 0;
-            const loadInterval = setInterval(() => {
-                loadProgress += Math.random() * 10;
-                if (loadProgress > 100) loadProgress = 100;
-                loadingBar.style.width = `${loadProgress}%`;
-                
-                // Update loading message every 20% progress
-                if (loadProgress % 20 < 5) {
-                    const messageIndex = Math.min(Math.floor(loadProgress / 20), loadingMessages.length - 1);
-                    loadingMessage.textContent = loadingMessages[messageIndex];
-                }
-                
-                if (loadProgress >= 100) {
-                    clearInterval(loadInterval);
-                    setTimeout(() => {
-                        loadingScreen.style.opacity = '0';
-                        setTimeout(() => {
-                            loadingScreen.style.display = 'none';
-                            firstBoot.style.display = 'block';
-                            initBoot();
-                        }, 500);
-                    }, 500);
-                }
-            }, 200);
+        // Update loading message every 20% progress
+        if (loadProgress % 20 < 5) {
+            const messageIndex = Math.min(Math.floor(loadProgress / 20), loadingMessages.length - 1);
+            loadingMessage.textContent = loadingMessages[messageIndex];
         }
         
-        // Initialize the boot process
-        function initBoot() {
-            // Show boot options if enabled
-            if (config.showBootOptions) {
+        if (loadProgress >= 100) {
+            clearInterval(loadInterval);
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
                 setTimeout(() => {
-                    bootOptions.style.display = 'block';
-                    // Add event listeners to boot options
-                    document.querySelectorAll('.boot-option').forEach(option => {
-                        option.addEventListener('click', () => {
-                            selectBootOption(option.dataset.action);
-                        });
-                    });
-                }, 1000);
-            } else {
-                startBooting(currentBootSequence);
-            }
-            
-            // Listen for ESC key to show boot options
-            document.addEventListener('keydown', (e) => {
-                if (e.key === 'Escape' && !bootOptions.style.display && !bootInProgress) {
-                    bootOptions.style.display = 'block';
-                }
-            });
-        }
-        
-        // Select boot option
-        function selectBootOption(mode) {
-            currentBootSequence = mode;
-            bootOptions.style.display = 'none';
-            startBooting(mode);
-        }
-        
-        // Start the boot process
-        function startBooting(mode) {
-            bootInProgress = true;
-            const bootMessages = bootSequences[mode];
-            const totalSteps = bootMessages.length;
-            const progressIncrement = 100 / totalSteps;
-            
-            // Clear existing messages except the first one
-            while (bootMessagesElement.children.length > 1) {
-                bootMessagesElement.removeChild(bootMessagesElement.lastChild);
-            }
-            
-            // Reset progress
-            progress = 0;
-            progressBar.style.width = '0%';
-            
-            // Hide ready message if it was shown
-            readyMessage.style.display = 'none';
-            
-            // Start resource simulation if enabled
-            if (config.simulateResources) {
-                simulateSystemResources();
-            }
-            
-            // Display boot messages
-            bootMessages.forEach((message, index) => {
-                setTimeout(() => {
-                    const messageElement = document.createElement('div');
-                    messageElement.className = `boot-message ${message.type}`;
-                    
-                    const timestamp = new Date();
-                    const timestampStr = `[${timestamp.getHours().toString().padStart(2, '0')}:` +
-                                        `${timestamp.getMinutes().toString().padStart(2, '0')}:` +
-                                        `${timestamp.getSeconds().toString().padStart(2, '0')}]`;
-                    
-                    messageElement.innerHTML = `
-                        <span class="timestamp">${timestampStr}</span>
-                        <span class="message-content">${message.text}</span>
-                    `;
-                    
-                    bootMessagesElement.appendChild(messageElement);
-                    bootMessagesElement.scrollTop = bootMessagesElement.scrollHeight;
-                    
-                    // Update progress bar
-                    progress += progressIncrement;
-                    progressBar.style.width = `${progress}%`;
-                    
-                    // Show ready message at the end or proceed to second boot
-                    if (index === bootMessages.length - 1) {
-                        setTimeout(() => {
-                            if (mode !== 'recovery') {
-                                proceedToSecondBoot({key: ''});
-                            } else {
-                                readyMessage.style.display = 'block';
-                                bootInProgress = false;
-                                document.addEventListener('keydown', () => {
-                                    window.location.href = "os.html";
-                                });
-                                document.addEventListener('click', () => {
-                                    window.location.href = "os.html";
-                                });
-                            }
-                        }, 1000);
-                    }
-                }, index === 0 ? message.delay : bootMessages.slice(0, index).reduce((acc, curr) => acc + curr.delay, 0));
-            });
-        }
-        
-        // Simulate system resource usage
-        function simulateSystemResources() {
-            let cpuUsage = 0;
-            let memUsage = 0;
-            let diskUsage = 0;
-            let temp = 30;
-            
-            const interval = setInterval(() => {
-                if (!bootInProgress) {
-                    clearInterval(interval);
-                    return;
-                }
-                
-                // Simulate CPU usage
-                cpuUsage = Math.min(config.maxCpuUsage, 5 + Math.random() * 70);
-                
-                // Simulate memory usage
-                memUsage = Math.min(config.maxMemUsage, 512 + (progress / 100) * (config.maxMemUsage - 512));
-                
-                // Simulate disk usage
-                diskUsage = Math.min(config.maxDiskUsage, 1024 + (progress / 100) * (config.maxDiskUsage - 1024));
-                
-                // Simulate temperature
-                temp = Math.min(config.maxTemp, 30 + (progress / 100) * (config.maxTemp - 30) + Math.random() * 5);
-                
-                // Update UI
-                cpuStat.textContent = `${Math.round(cpuUsage)}%`;
-                memStat.textContent = `${Math.round(memUsage)}MB/${config.maxMemUsage}MB`;
-                diskStat.textContent = `${Math.round(diskUsage)}MB/${config.maxDiskUsage}MB`;
-                tempStat.textContent = `${Math.round(temp)}°C`;
-                
+                    loadingScreen.style.display = 'none';
+                    firstBoot.style.display = 'block';
+                    initBoot();
+                }, 500);
             }, 500);
         }
-        
-        // Proceed to second boot sequence
-        function proceedToSecondBoot(e) {
-            // Don't proceed if ESC was pressed (used for boot options)
-            if (e.key === 'Escape') return;
+    }, 200);
+}
+
+// Initialize the boot process
+function initBoot() {
+    // Show boot options if enabled
+    if (config.showBootOptions) {
+        setTimeout(() => {
+            bootOptions.style.display = 'block';
+            // Add event listeners to boot options
+            document.querySelectorAll('.boot-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    selectBootOption(option.dataset.action);
+                });
+            });
+        }, 1000);
+    } else {
+        startBooting(currentBootSequence);
+    }
+    
+    // Listen for ESC key to show boot options
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && !bootOptions.style.display && !bootInProgress) {
+            bootOptions.style.display = 'block';
+        }
+    });
+}
+
+// Select boot option
+function selectBootOption(mode) {
+    currentBootSequence = mode;
+    bootOptions.style.display = 'none';
+    startBooting(mode);
+}
+
+// Start the boot process
+function startBooting(mode) {
+    bootInProgress = true;
+    const bootMessages = bootSequences[mode];
+    const totalSteps = bootMessages.length;
+    const progressIncrement = 100 / totalSteps;
+    
+    // Clear existing messages except the first one
+    while (bootMessagesElement.children.length > 1) {
+        bootMessagesElement.removeChild(bootMessagesElement.lastChild);
+    }
+    
+    // Reset progress
+    progress = 0;
+    progressBar.style.width = '0%';
+    
+    // Hide ready message if it was shown
+    readyMessage.style.display = 'none';
+    
+    // Start resource simulation if enabled
+    if (config.simulateResources) {
+        simulateSystemResources();
+    }
+    
+    // Display boot messages
+    bootMessages.forEach((message, index) => {
+        setTimeout(() => {
+            const messageElement = document.createElement('div');
+            messageElement.className = `boot-message ${message.type}`;
             
-            document.removeEventListener('keydown', proceedToSecondBoot);
-            document.removeEventListener('click', proceedToSecondBoot);
+            const timestamp = new Date();
+            const timestampStr = `[${timestamp.getHours().toString().padStart(2, '0')}:` +
+                                `${timestamp.getMinutes().toString().padStart(2, '0')}:` +
+                                `${timestamp.getSeconds().toString().padStart(2, '0')}]`;
             
-            // Hide the first boot sequence
-            firstBoot.style.display = 'none';
+            messageElement.innerHTML = `
+                <span class="timestamp">${timestampStr}</span>
+                <span class="message-content">${message.text}</span>
+            `;
             
-            // Show the modern boot sequence
-            modernBoot.style.display = 'block';
+            bootMessagesElement.appendChild(messageElement);
+            bootMessagesElement.scrollTop = bootMessagesElement.scrollHeight;
             
-            // Start the modern boot sequence
-            startModernBoot();
+            // Update progress bar
+            progress += progressIncrement;
+            progressBar.style.width = `${progress}%`;
+            
+            // Show ready message at the end or proceed to second boot
+            if (index === bootMessages.length - 1) {
+                setTimeout(() => {
+                    if (mode !== 'recovery') {
+                        proceedToSecondBoot({key: ''});
+                    } else {
+                        readyMessage.style.display = 'block';
+                        bootInProgress = false;
+                        document.addEventListener('keydown', () => {
+                            window.location.href = "os.html";
+                        });
+                        document.addEventListener('click', () => {
+                            window.location.href = "os.html";
+                        });
+                    }
+                }, 1000);
+            }
+        }, index === 0 ? message.delay : bootMessages.slice(0, index).reduce((acc, curr) => acc + curr.delay, 0));
+    });
+}
+
+// Simulate system resource usage
+function simulateSystemResources() {
+    let cpuUsage = 0;
+    let memUsage = 0;
+    let diskUsage = 0;
+    let temp = 30;
+    
+    const interval = setInterval(() => {
+        if (!bootInProgress) {
+            clearInterval(interval);
+            return;
         }
         
-        // Start the modern boot sequence
+        // Simulate CPU usage
+        cpuUsage = Math.min(config.maxCpuUsage, 5 + Math.random() * 70);
+        
+        // Simulate memory usage
+        memUsage = Math.min(config.maxMemUsage, 512 + (progress / 100) * (config.maxMemUsage - 512));
+        
+        // Simulate disk usage
+        diskUsage = Math.min(config.maxDiskUsage, 1024 + (progress / 100) * (config.maxDiskUsage - 1024));
+        
+        // Simulate temperature
+        temp = Math.min(config.maxTemp, 30 + (progress / 100) * (config.maxTemp - 30) + Math.random() * 5);
+        
+        // Update UI
+        cpuStat.textContent = `${Math.round(cpuUsage)}%`;
+        memStat.textContent = `${Math.round(memUsage)}MB/${config.maxMemUsage}MB`;
+        diskStat.textContent = `${Math.round(diskUsage)}MB/${config.maxDiskUsage}MB`;
+        tempStat.textContent = `${Math.round(temp)}°C`;
+        
+    }, 500);
+}
+
+// Show dual boot OS selection menu
+function showDualBootMenu() {
+    bootMessagesElement.innerHTML = `
+        <div class="dual-boot-menu">
+            <div class="dual-boot-header">Select Operating System</div>
+            <div class="dual-boot-option" data-os="cr42">
+                <span class="dual-boot-icon">🖥️</span>
+                <span class="dual-boot-name">CR42 OS</span>
+                <span class="dual-boot-desc">Advanced digital consciousness</span>
+            </div>
+            <div class="dual-boot-option" data-os="linux">
+                <span class="dual-boot-icon">🐧</span>
+                <span class="dual-boot-name">Linux</span>
+                <span class="dual-boot-desc">Traditional kernel environment</span>
+                <span class="dual-boot-warning">(Will boot to linux.html)</span>
+            </div>
+            <div class="dual-boot-hint">Use arrow keys and Enter to select</div>
+        </div>
+    `;
+
+    // Add event listeners
+    document.querySelectorAll('.dual-boot-option').forEach(option => {
+        option.addEventListener('click', () => {
+            selectOS(option.dataset.os);
+        });
+    });
+    
+    // Keyboard navigation
+    let selectedIndex = 0;
+    const options = document.querySelectorAll('.dual-boot-option');
+    options[selectedIndex].style.borderColor = 'var(--primary-color)';
+    options[selectedIndex].style.backgroundColor = 'rgba(0, 255, 0, 0.1)';
+    
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowDown') selectedIndex = (selectedIndex + 1) % options.length;
+        if (e.key === 'ArrowUp') selectedIndex = (selectedIndex - 1 + options.length) % options.length;
+        if (e.key === 'Enter') selectOS(options[selectedIndex].dataset.os);
+        
+        options.forEach((opt, i) => {
+            opt.style.borderColor = i === selectedIndex ? 'var(--primary-color)' : 'var(--border-color)';
+            opt.style.backgroundColor = i === selectedIndex ? 'rgba(0, 255, 0, 0.1)' : 'transparent';
+        });
+    });
+}
+
+// Handle OS selection in dual boot
+function selectOS(os) {
+    selectedOS = os;
+    bootMessagesElement.innerHTML = '';
+    
+    const message = document.createElement('div');
+    message.className = 'boot-message info';
+    const timestamp = new Date();
+    const timestampStr = `[${timestamp.getHours().toString().padStart(2, '0')}:${timestamp.getMinutes().toString().padStart(2, '0')}:${timestamp.getSeconds().toString().padStart(2, '0')}]`;
+    
+    message.innerHTML = `
+        <span class="timestamp">${timestampStr}</span>
+        <span class="message-content">Booting ${os === 'cr42' ? 'CR42 OS' : 'Linux'}...</span>
+    `;
+    
+    bootMessagesElement.appendChild(message);
+    
+    setTimeout(() => {
+        firstBoot.style.display = 'none';
+        modernBoot.style.display = 'block';
+        startModernBoot();
+    }, 1500);
+}
+
+// Proceed to second boot sequence
+function proceedToSecondBoot(e) {
+    // Don't proceed if ESC was pressed (used for boot options)
+    if (e.key === 'Escape') return;
+    
+    document.removeEventListener('keydown', proceedToSecondBoot);
+    document.removeEventListener('click', proceedToSecondBoot);
+    
+    // Special handling for dual boot
+    if (currentBootSequence === 'dual') {
+        showDualBootMenu();
+        return;
+    }
+    
+    // Hide the first boot sequence
+    firstBoot.style.display = 'none';
+    
+    // Show the modern boot sequence
+    modernBoot.style.display = 'block';
+    
+    // Start the modern boot sequence
+    startModernBoot();
+}
+
+// Start the modern boot sequence
 function startModernBoot() {
     modernBootSequence.forEach((step, index) => {
         setTimeout(() => {
@@ -806,16 +960,16 @@ function startModernBoot() {
             if (index === modernBootSequence.length - 1) {
                 setTimeout(() => {
                     modernBoot.style.display = 'none';
-                    window.location.href = "os.html";
+                    // Redirect based on selected OS
+                    window.location.href = selectedOS === 'linux' ? 'linux.html' : 'os.html';
                 }, 1500);
             }
         }, index * 1000);
     });
 }
-        
-        
-        // Start with loading screen when page loads
-        window.onload = showLoadingScreen;
+
+// Start with loading screen when page loads
+window.onload = showLoadingScreen;
     </script>
 </body>
 </html>

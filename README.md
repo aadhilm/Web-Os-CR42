@@ -1,6 +1,5 @@
 # CR42 OS - Web-based Operating System Simulation
 
-![CR42 OS](https://img.shields.io/badge/Version-0.42-blue)
 ![Platform](https://img.shields.io/badge/Platform-Web-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-yellow)
 ![Access](https://img.shields.io/badge/Access-Browser%20Based-9cf)  
@@ -52,7 +51,9 @@ A classic desktop environment with a nostalgic look and feel.
   - Window controls: Minimize, maximize, close  
   - Drag-and-drop window support  
   - Shutdown and restart functionality  
-  - Real-time system clock  
+  - Real-time system clock
+ 
+ ------
 
 #### 🐧 CR42 v0.42.2 — Linux Interface
 A terminal-centric design inspired by modern Linux distributions.
@@ -64,16 +65,12 @@ A terminal-centric design inspired by modern Linux distributions.
   - ⚙️ **System Settings** – Customize appearance and behavior  
   - 🔒 **Lock Screen** – Password-protected access ("linux" is the default)  
 
----
-
 ### 🧭 Basic Interactions
 
 - **Double-click** icons to launch applications  
 - **Right-click** the desktop to open context menus  
 - **Drag** windows by their title bars  
 - Use **panel icons** for quick access to common features  
-
----
 
 ## 🌟 Special Features
 
@@ -87,15 +84,6 @@ A terminal-centric design inspired by modern Linux distributions.
 
 
 ## ⚙️ Core Features Matrix
-
-| Feature | Implementation | Technical Detail |
-|---------|----------------|------------------|
-| Dual Boot System | JavaScript emulation | Simulates OS selection menu |
-| Boot Modes | CSS/JS animation | 4 distinct boot sequences |
-| System Monitoring | Simulated data | Dynamic resource usage display |
-| UI Styles | CSS transforms | Retro terminal vs modern animated |
-| Interactive Elements | Event listeners | Full keyboard/mouse support |
-| Responsive Design | Flexbox/Media Queries | Adapts to screen sizes |
 
 ## 🛠️ Technology Stack
 - **Frontend**: HTML5, CSS3, JavaScript

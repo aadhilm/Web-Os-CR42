@@ -21,7 +21,7 @@ Advanced browser-based simulation of a operating system with dual boot capabilit
 ✔️ Analyze simulated system monitoring approaches  
 ✔️ Develop alternative navigation paradigms  
 
-## Features
+## 🚀 Features
 
 - **Dual Boot System**: Choose between CR42 OS and Linux environments
 - **Multiple Boot Modes**:
@@ -36,6 +36,55 @@ Advanced browser-based simulation of a operating system with dual boot capabilit
   - Modern animated boot screen
 - **Interactive Elements** with keyboard and mouse support
 - **Responsive Design** that works on different screen sizes
+
+### 🖥️ CR42 OS UI
+
+#### 🔷 CR42 v0.42.1 — Retro Interface
+A classic desktop environment with a nostalgic look and feel.
+
+- **Desktop Environment**: Icons, taskbar, and start menu
+- **Functional Applications**:
+  - 📝 **Notepad** – Basic text editor  
+  - ➕ **Calculator** – Simple arithmetic operations  
+  - 🌐 **Web Browser** – Simulated Yahoo homepage  
+  - 💣 **Minesweeper** – Fully playable retro-style game
+- **System Functions**:
+  - Window controls: Minimize, maximize, close  
+  - Drag-and-drop window support  
+  - Shutdown and restart functionality  
+  - Real-time system clock  
+
+#### 🐧 CR42 v0.42.2 — Linux Interface
+A terminal-centric design inspired by modern Linux distributions.
+
+- **Applications**:
+  - 📁 **File Manager** – Navigate a simulated file system  
+  - 💻 **Terminal** – Interactive command-line interface  
+  - 🔍 **Web Browser** – Firefox-style with functional Google search  
+  - ⚙️ **System Settings** – Customize appearance and behavior  
+  - 🔒 **Lock Screen** – Password-protected access ("linux" is the default)  
+
+---
+
+### 🧭 Basic Interactions
+
+- **Double-click** icons to launch applications  
+- **Right-click** the desktop to open context menus  
+- **Drag** windows by their title bars  
+- Use **panel icons** for quick access to common features  
+
+---
+
+## 🌟 Special Features
+
+- 💬 **Real-time Terminal**: Supports common Linux commands  
+  - Try: `ls`, `mkdir`, `sudo`, `neofetch`, and more  
+- 📊 **System Monitoring**: Simulated CPU, memory, disk, and temperature stats  
+- 🖼️ **Wallpaper Customization**: Choose from presets or upload your own  
+- 🔒 **Lock Screen Password**: Default is `"linux"`  
+- 🌐 **Browser Simulation**: Functional Google search via simulated browser  
+> 💡 **Tip**: Type `neofetch` in the terminal for cool system info output!
+
 
 ## ⚙️ Core Features Matrix
 

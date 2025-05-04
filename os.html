@@ -681,6 +681,105 @@
       cursor: pointer;
       font-size: 14px;
     }
+
+    /* Lock Screen Styles */
+    #lock-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #241f31 0%, #3d3846 100%);
+      z-index: 9997;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      backdrop-filter: blur(5px);
+    }
+
+    .lock-container {
+      text-align: center;
+      animation: fadeIn 0.5s ease-out;
+    }
+
+    .user-avatar img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      border: 3px solid rgba(120, 174, 237, 0.5);
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+
+    .user-name {
+      font-size: 24px;
+      margin-bottom: 5px;
+      color: #78aeed;
+      font-weight: 500;
+    }
+
+    .time-display {
+      font-size: 72px;
+      font-weight: 300;
+      margin: 10px 0;
+      font-family: 'Ubuntu', sans-serif;
+    }
+
+    .date-display {
+      font-size: 18px;
+      margin-bottom: 40px;
+      opacity: 0.8;
+    }
+
+    .unlock-prompt {
+      font-size: 14px;
+      opacity: 0.7;
+      margin-top: 30px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .unlock-prompt:hover {
+      opacity: 1;
+    }
+
+    .password-prompt {
+      margin-top: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .password-prompt input {
+      padding: 12px 15px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 10px;
+      width: 200px;
+      font-size: 16px;
+      background: rgba(255,255,255,0.9);
+    }
+
+    .password-prompt button {
+      padding: 10px 25px;
+      background: #78aeed;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    .password-prompt button:hover {
+      background: #6a9ed6;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
   </style>
 </head>
 
@@ -695,6 +794,23 @@
     <div class="indicator-3 indeterminate-ring"></div>
     <div class="indicator-4 indeterminate-ring"></div>
     <div class="indicator-5 indeterminate-ring"></div>
+  </div>
+</div>
+
+<!-- Lock Screen -->
+<div id="lock-screen" style="display:none;">
+  <div class="lock-container">
+    <div class="user-avatar">
+      <img src="https://i.imgur.com/J9U0Qx1.png" alt="User Avatar">
+    </div>
+    <div class="user-name">user</div>
+    <div class="time-display" id="lock-time">00:00</div>
+    <div class="date-display" id="lock-date">Monday, January 1</div>
+    <div class="unlock-prompt">Click or press any key to unlock</div>
+    <div class="password-prompt" style="display:none;">
+      <input type="password" id="lock-password" placeholder="Enter Password">
+      <button onclick="unlockDesktop()">Unlock</button>
+    </div>
   </div>
 </div>
 
@@ -801,6 +917,10 @@
   <div class="app-menu-item" onclick="$('#tab-settings').show(); $('#appMenu').hide();">
     <i class="fas fa-cog"></i>
     <span>Settings</span>
+  </div>
+  <div class="app-menu-item" onclick="lockDesktop()" style="border-top: 1px solid #d1cfcc; margin-top: 5px;">
+    <i class="fas fa-lock"></i>
+    <span>Lock Screen</span>
   </div>
   <div class="app-menu-item" style="border-top: 1px solid #d1cfcc; margin-top: 5px;" onclick="logout()">
     <i class="fas fa-power-off"></i>
@@ -1228,34 +1348,6 @@ $(function() {
   });
 });
 
-// Firefox browser functionality
-$(document).ready(function() {
-  // Handle URL navigation
-  $('#firefox-url').on('keypress', function(e) {
-    if(e.which === 13) { // Enter key
-      let url = $(this).val();
-      if(!url.startsWith('http://') && !url.startsWith('https://')) {
-        url = 'https://' + url;
-        $(this).val(url);
-      }
-      $('#firefox-frame').attr('src', url);
-      
-      // Update status (simplified)
-      $('#tab-footer').html('<i class="fas fa-sync-alt fa-spin" style="margin-right:5px;"></i> Loading...');
-      setTimeout(function() {
-        $('#tab-footer').html('<i class="fas fa-lock" style="margin-right:5px;"></i> Secure connection - ' + 
-                             (new URL(url)).hostname);
-      }, 1500);
-    }
-  });
-  
-  // Simulate browser controls
-  $(document).on('dblclick', '[alt="Firefox"]', function() {
-    $('#firefox-frame').attr('src', 'https://www.mozilla.org');
-    $('#firefox-url').val('https://www.mozilla.org');
-  });
-});
-
 // Terminal functionality
 const terminal = document.getElementById('terminal');
 let inputLine = document.getElementById('input-line');
@@ -1265,7 +1357,8 @@ let currentPath = '/home/user';
 let isRoot = false;
 let fakeFileSystem = ['Downloads', 'Music', 'Pictures', 'Videos', 'notes.txt', 'report.pdf', 'presentation.pptx']
 
-inputLine.addEventListener('keydown', function(e) {
+// Fixed terminal input handler
+function handleTerminalInput(e) {
   if (e.key === 'Enter') {
     const command = inputLine.value.trim();
     const newLine = document.createElement('div');
@@ -1280,13 +1373,17 @@ inputLine.addEventListener('keydown', function(e) {
     inputLine.value = '';
     terminal.scrollTop = terminal.scrollHeight;
   }
-});
+}
 
+// Attach event listener once
+inputLine.addEventListener('keydown', handleTerminalInput);
+
+// Update the terminal command simulation function
 function simulateTerminalCommand(cmd) {
   if (cmd === '') return '';
 
   if (cmd === 'help') {
-    return 'Available commands: help, clear, echo, date, whoami, pwd, ls, mkdir, sudo su, exit';
+    return 'Available commands: help, clear, echo, date, whoami, pwd, ls, mkdir, sudo su, exit, neofetch';
   }
 
   if (cmd === 'clear') {
@@ -1297,7 +1394,10 @@ function simulateTerminalCommand(cmd) {
     terminal.appendChild(newInput);
     inputLine = document.getElementById('input-line');
     promptSpan = document.getElementById('prompt');
-    inputLine.addEventListener('keydown', arguments.callee);
+    
+    // Reattach the event listener to the new input
+    inputLine.addEventListener('keydown', handleTerminalInput);
+    
     return '';
   }
 
@@ -1341,6 +1441,46 @@ function simulateTerminalCommand(cmd) {
 
   if (cmd.startsWith('echo ')) {
     return cmd.slice(5);
+  }
+
+  if (cmd === 'neofetch') {
+    // Calculate uptime
+    const uptimeMs = performance.now();
+    const uptimeHours = Math.floor(uptimeMs / 3600000);
+    const uptimeMins = Math.floor((uptimeMs % 3600000) / 60000);
+    const uptimeSecs = Math.floor((uptimeMs % 60000) / 1000);
+    
+    // Get browser info
+    const browserInfo = navigator.userAgent.split(')')[0].split('(')[1] || 'Unknown Browser';
+    const chromeMatch = navigator.userAgent.match(/Chrome\/(\d+\.\d+)/);
+    const chromeVersion = chromeMatch ? chromeMatch[1] : 'Unknown';
+    
+    // Get memory info (if available)
+    let memoryInfo = 'Unknown';
+    if (performance.memory) {
+      const totalMB = (performance.memory.jsHeapSizeLimit / (1024 * 1024)).toFixed(1);
+      const usedMB = (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(1);
+      memoryInfo = `${usedMB}MB / ${totalMB}MB`;
+    }
+    
+    // Get screen resolution
+    const screenRes = `${window.screen.width}x${window.screen.height}`;
+    
+    // Format the output with proper line breaks
+    return [
+        '',
+        '       user@cr42',
+        '       ---------',
+        `       OS: CR42 Web OS v0.42`,
+        `       Host: ${browserInfo}`,
+        `       Kernel: JavaScript ${chromeVersion}`,
+        `       Uptime: ${uptimeHours}h ${uptimeMins}m ${uptimeSecs}s`,
+        `       Shell: web-terminal 1.0`,
+        `       Resolution: ${screenRes}`,
+        `       CPU: ${navigator.hardwareConcurrency || 'Unknown'} cores`,
+        `       Memory: ${memoryInfo}`,
+        ''
+    ].join('\n');
   }
 
   return `Command not found: ${cmd}`;
@@ -1658,7 +1798,6 @@ function applyWallpaper() {
   $('#tab-wallpaper').hide();
 }
 
-
 function updateWallpaperPreview() {
   if (currentWallpaper.startsWith('custom:')) {
     document.getElementById('current-wallpaper-preview').style.backgroundImage = `url(${currentWallpaper.replace('custom:', '')})`;
@@ -1675,10 +1814,74 @@ function openWallpaperSettings() {
   $('#body-rmenu').hide();
 }
 
+// Lock screen functionality
+let isLocked = false;
+let lockScreenInterval;
+
+function updateLockScreenTime() {
+  if (!isLocked) return;
+  
+  const now = new Date();
+  const timeString = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+  const dateString = now.toLocaleDateString([], {weekday: 'long', month: 'long', day: 'numeric'});
+  
+  $('#lock-time').text(timeString);
+  $('#lock-date').text(dateString);
+}
+
+function lockDesktop() {
+  isLocked = true;
+  $('#lock-screen').fadeIn(300);
+  $('.window').hide();
+  $('#appMenu').hide();
+  $('#body-rmenu').hide();
+  updateLockScreenTime();
+  
+  // Set interval to update time
+  lockScreenInterval = setInterval(updateLockScreenTime, 1000);
+}
+
+function unlockDesktop() {
+  const password = $('#lock-password').val();
+  // Simple password check - in a real system this would be more secure
+  if (password === 'linux' || password === '') {
+    isLocked = false;
+    $('#lock-screen').fadeOut(300);
+    $('.password-prompt').hide();
+    $('.unlock-prompt').show();
+    $('#lock-password').val('');
+    clearInterval(lockScreenInterval);
+  } else {
+    alert('Incorrect password! Try "linux" or leave empty');
+  }
+}
+
+// Handle lock screen clicks and key presses
+$('#lock-screen').on('click', function() {
+  $('.unlock-prompt').fadeOut(200, function() {
+    $('.password-prompt').fadeIn(200, function() {
+      $('#lock-password').focus();
+    });
+  });
+});
+
+$(document).on('keydown', function(e) {
+  if (isLocked && e.key === 'Enter') {
+    unlockDesktop();
+  }
+});
+
+// Add keyboard shortcut (Win+L or Ctrl+Alt+L) to lock screen
+$(document).on('keydown', function(e) {
+  // Win+L or Ctrl+Alt+L
+  if ((e.key === 'l' || e.key === 'L') && (e.ctrlKey || e.metaKey) && e.altKey) {
+    lockDesktop();
+    e.preventDefault();
+  }
+});
 
 $(document).ready(function() {
   initWallpaper();
-
   changeSettingsTab('system');
 });
 

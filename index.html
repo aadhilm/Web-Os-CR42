@@ -862,16 +862,15 @@ function showDualBootMenu() {
     bootMessagesElement.innerHTML = `
         <div class="dual-boot-menu">
             <div class="dual-boot-header">Select Operating System</div>
+             <div class="dual-boot-option" data-os="linux">
+                <span class="dual-boot-icon">🐧</span>
+                <span class="dual-boot-name">CR42 OS v.0.42.2</span>
+                <span class="dual-boot-desc">Linux Kernel Environment</span>
+            </div>
             <div class="dual-boot-option" data-os="cr42">
                 <span class="dual-boot-icon">🖥️</span>
-                <span class="dual-boot-name">CR42 OS</span>
-                <span class="dual-boot-desc">Advanced digital consciousness</span>
-            </div>
-            <div class="dual-boot-option" data-os="linux">
-                <span class="dual-boot-icon">🐧</span>
-                <span class="dual-boot-name">Linux</span>
-                <span class="dual-boot-desc">Traditional kernel environment</span>
-                <span class="dual-boot-warning">(Will boot to linux.html)</span>
+                <span class="dual-boot-name">CR42 OS v.0.42.1</span>
+                <span class="dual-boot-desc">Classic version</span>
             </div>
             <div class="dual-boot-hint">Use arrow keys and Enter to select</div>
         </div>
@@ -961,7 +960,7 @@ function startModernBoot() {
                 setTimeout(() => {
                     modernBoot.style.display = 'none';
                     // Redirect based on selected OS
-                    window.location.href = selectedOS === 'linux' ? 'linux.html' : 'os.html';
+                    window.location.href = selectedOS === 'linux' ? 'os.html' : 'os1.html';
                 }, 1500);
             }
         }, index * 1000);

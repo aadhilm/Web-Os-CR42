@@ -21,6 +21,22 @@ Advanced browser-based simulation of a operating system with dual boot capabilit
 ✔️ Analyze simulated system monitoring approaches  
 ✔️ Develop alternative navigation paradigms  
 
+## Features
+
+- **Dual Boot System**: Choose between CR42 OS and Linux environments
+- **Multiple Boot Modes**:
+  - Normal Boot
+  - Safe Mode
+  - Debug Mode
+  - Recovery Console
+- **Realistic Boot Sequence** with simulated system messages
+- **System Resource Monitoring** (simulated CPU, memory, disk, and temperature)
+- **Two Distinct UI Styles**:
+  - Retro terminal interface
+  - Modern animated boot screen
+- **Interactive Elements** with keyboard and mouse support
+- **Responsive Design** that works on different screen sizes
+
 ## ⚙️ Core Features Matrix
 
 | Feature | Implementation | Technical Detail |

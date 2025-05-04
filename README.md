@@ -47,6 +47,7 @@ Advanced browser-based simulation of a operating system with dual boot capabilit
 ## ⚙️ Installation & Usage
 
 **Option 1: Web Access (Instant Demo)**
+
 🌐 Live Demo: [https://aadhilm.github.io/Web-Os-CR42/](https://aadhilm.github.io/Web-Os-CR42/)  
 - No installation required
 - Loads directly in browser

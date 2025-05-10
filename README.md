@@ -22,7 +22,8 @@ Advanced browser-based simulation of a operating system with dual boot capabilit
 
 ## 🚀 Features
 
-- **Dual Boot System**: Choose between CR42 OS v1 and CR42 OS v2 version.
+- **Dual Boot System**: Choose between Retro Interface and Linux Interface
+
 - **Multiple Boot Modes**:
   - Normal Boot
   - Safe Mode

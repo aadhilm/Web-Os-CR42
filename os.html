@@ -1403,12 +1403,12 @@ function simulateTerminalCommand(cmd) {
     newInput.classList.add('terminal-line');
     newInput.innerHTML = `<span class="prompt" id="prompt">${isRoot ? 'root@linux:~#' : 'user@linux:~$'}</span><input id="input-line" autofocus />`;
     terminal.appendChild(newInput);
+
     inputLine = document.getElementById('input-line');
     promptSpan = document.getElementById('prompt');
-    
-    // Reattach the event listener to the new input
+
     inputLine.addEventListener('keydown', handleTerminalInput);
-    
+
     return '';
   }
 
@@ -1440,12 +1440,14 @@ function simulateTerminalCommand(cmd) {
 
   if (cmd === 'sudo su') {
     isRoot = true;
+    currentPath = '/home/root';
     promptSpan.textContent = 'root@linux:~#';
     return '';
   }
 
   if (cmd === 'exit') {
     isRoot = false;
+    currentPath = '/home/user';
     promptSpan.textContent = 'user@linux:~$';
     return '';
   }
@@ -1455,43 +1457,51 @@ function simulateTerminalCommand(cmd) {
   }
 
   if (cmd === 'neofetch') {
-    // Calculate uptime
-    const uptimeMs = performance.now();
+
+    // uptime
+    const now = Date.now();
+    const startTime = window.performance.timing?.navigationStart || now;
+    const uptimeMs = now - startTime;
     const uptimeHours = Math.floor(uptimeMs / 3600000);
     const uptimeMins = Math.floor((uptimeMs % 3600000) / 60000);
     const uptimeSecs = Math.floor((uptimeMs % 60000) / 1000);
-    
-    // Get browser info
-    const browserInfo = navigator.userAgent.split(')')[0].split('(')[1] || 'Unknown Browser';
-    const chromeMatch = navigator.userAgent.match(/Chrome\/(\d+\.\d+)/);
+
+    // browser info
+    const ua = navigator.userAgent;
+    const osMatch = ua.match(/\(([^)]+)\)/);
+    let osInfo = osMatch ? osMatch[1] : "Unknown OS";
+    const osParts = osInfo.split(';').map(s => s.trim());
+
+    const chromeMatch = ua.match(/Chrome\/([\d.]+)/);
     const chromeVersion = chromeMatch ? chromeMatch[1] : 'Unknown';
-    
-    // Get memory info (if available)
+
     let memoryInfo = 'Unknown';
     if (performance.memory) {
-      const totalMB = (performance.memory.jsHeapSizeLimit / (1024 * 1024)).toFixed(1);
-      const usedMB = (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(1);
-      memoryInfo = `${usedMB}MB / ${totalMB}MB`;
+      const used = (performance.memory.usedJSHeapSize / (1024 * 1024)).toFixed(1);
+      const total = (performance.memory.jsHeapSizeLimit / (1024 * 1024)).toFixed(1);
+      memoryInfo = `${used}MB / ${total}MB`;
     }
-    
-    // Get screen resolution
+
     const screenRes = `${window.screen.width}x${window.screen.height}`;
-    
-    // Format the output with proper line breaks
-    return [
-        '',
-        '       user@cr42',
-        '       ---------',
-        `       OS: CR42 Web OS v0.42`,
-        `       Host: ${browserInfo}`,
-        `       Kernel: JavaScript ${chromeVersion}`,
-        `       Uptime: ${uptimeHours}h ${uptimeMins}m ${uptimeSecs}s`,
-        `       Shell: web-terminal 1.0`,
-        `       Resolution: ${screenRes}`,
-        `       CPU: ${navigator.hardwareConcurrency || 'Unknown'} cores`,
-        `       Memory: ${memoryInfo}`,
-        ''
-    ].join('\n');
+    const cpuCores = navigator.hardwareConcurrency || 'Unknown';
+
+    const output = [
+      '',
+      '       user@cr42',
+      '       ---------',
+      `       OS: CR42 Web OS v0.42`,
+      `       Host: ${osParts[0]}`,
+      ...osParts.slice(1).map(part => `             ${part}`),
+      `       Kernel: JavaScript ${chromeVersion}`,
+      `       Uptime: ${uptimeHours}h ${uptimeMins}m ${uptimeSecs}s`,
+      `       Shell: web-terminal 1.0`,
+      `       Resolution: ${screenRes}`,
+      `       CPU: ${cpuCores} cores`,
+      `       Memory: ${memoryInfo}`,
+      ''
+    ];
+
+    return output.join('\n');
   }
 
   return `Command not found: ${cmd}`;

@@ -600,36 +600,49 @@ body {
     </div>
 
     <div id="taskbar">
-        <div id="start-button" onclick="toggleStartMenu()">
-            <i class="fas fa-windows"></i> Start
+    <div id="start-button" onclick="toggleStartMenu()">
+        <i class="fas fa-windows"></i> Start
+    </div>
+
+    <div id="start-menu">
+        <div class="start-menu-item" onclick="openApp('notepad')">
+            <i class="fas fa-file-alt"></i> Notepad
         </div>
-        <div id="start-menu">
-            <div class="start-menu-item" onclick="openApp('notepad')">
-                <i class="fas fa-file-alt"></i> Notepad
-            </div>
-            <div class="start-menu-item" onclick="openApp('calculator')">
-                <i class="fas fa-calculator"></i> Calculator
-            </div>
-            <div class="start-menu-item" onclick="openApp('browser')">
-                <i class="fas fa-globe"></i> Browser
-            </div>
-            <div class="start-menu-item" onclick="openApp('minesweeper')">
-                <i class="fas fa-bomb"></i> Minesweeper
-            </div>
-            <div class="start-menu-item" onclick="openApp('about')">
-                <i class="fas fa-user"></i> About Developer
-            </div>
-            <div class="start-menu-item" onclick="shutdown()">
-                <i class="fas fa-power-off"></i> Shutdown
-            </div>
+
+        <div class="start-menu-item" onclick="openApp('calculator')">
+            <i class="fas fa-calculator"></i> Calculator
         </div>
-        <div id="taskbar-icons">
-            <!-- Open apps will appear here -->
+
+        <div class="start-menu-item" onclick="openApp('browser')">
+            <i class="fas fa-globe"></i> Browser
         </div>
-        <div id="clock">
-            12:00 PM
+
+        <div class="start-menu-item" onclick="openApp('minesweeper')">
+            <i class="fas fa-bomb"></i> Minesweeper
+        </div>
+
+        <div class="start-menu-item" onclick="openApp('about')">
+            <i class="fas fa-user"></i> About Developer
+        </div>
+
+        <!-- Reboot Button -->
+        <div class="start-menu-item" onclick="window.location.href='https://aadhilm.github.io/Web-Os-CR42/'">
+            <i class="fas fa-sync-alt"></i> Reboot
+        </div>
+
+        <div class="start-menu-item" onclick="shutdown()">
+            <i class="fas fa-power-off"></i> Shutdown
         </div>
     </div>
+
+    <div id="taskbar-icons">
+        <!-- Open apps will appear here -->
+    </div>
+
+    <div id="clock">
+        12:00 PM
+    </div>
+</div>
 
     <!-- Window Templates -->
     <div class="window" id="notepad-window" data-app="notepad">
